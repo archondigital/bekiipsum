@@ -1,0 +1,43 @@
+---
+layout: default
+---
+<div class="post h-entry">
+
+	<header class="post-header">
+		<div class="row">
+		  	<div class="large-12 columns">
+			  	<h1 class="entry-title p-name">{{ page.title }}</h1>
+		  	</div>  		
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				<p class="meta"><time class="published dt-published" datetime="{{ page.date | date: "%b %-d, %Y" }}">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span class="author p-author h-card">{{ page.author }}</span>{% endif %}{% if page.meta %} • <span>{{ page.meta }}</span>{% endif %}</p>	
+			</div>
+		</div>
+		<div class="row">
+			<div class="large-12 columns">
+				{% include snippet-social.html %}
+			</div>
+		</div>
+
+	</header>
+
+	
+	<article class="post-content entry-content e-content">
+		<div class="row">
+			<div class="large-12 columns">
+				{{ content }}			
+				<hr>
+			</div>
+		</div>
+	</article>
+	
+	<div class="row">
+		<div class="large-12 columns">
+			{% include snippet-social.html %}		
+		</div>
+	</div>
+	
+	{% include comments.html %}
+
+</div>

@@ -1,0 +1,110 @@
+<script>
+    var lorems = [
+        {% include dictionary.html %}
+        ',',
+        'at',
+        'ng',
+        'nang',
+        'kasi',
+        'bakit',
+        'ano',
+        'ang',
+        'na',
+        'na ang',
+        'at ang',
+        'at nang',
+        'at bakit',
+        'sa',
+        'at',
+        'ng',
+        'nang',
+        'kasi',
+        'bakit',
+        'ano',
+        'ang',
+        'na',
+        'na ang',
+        'at ang',
+        'at nang',
+        'at bakit',
+        'sa',
+        'at',
+        'ng',
+        'nang',
+        'kasi',
+        'bakit',
+        'ano',
+        'ang',
+        'na',
+        'na ang',
+        'at ang',
+        'at nang',
+        'at bakit',
+        'sa',
+        'at',
+        'ng',
+        'nang',
+        'kasi',
+        'bakit',
+        'ano',
+        'ang',
+        'na',
+        'na ang',
+        'at ang',
+        'at nang',
+        'at bakit',
+        'sa'                
+
+    ];
+
+    var param = window.location.search.substring(1).length > 0;
+
+    if (param) {
+
+        var lorem = lorems[Math.floor(Math.random()*lorems.length)];
+        var loremGen = [];
+        var multiPara = '';
+        var wordCount = window.location.search.substring(1).split("&")[0].split("=")[1];
+        var paraCount = window.location.search.substring(1).split("&")[1].split("=")[1];
+        var generatedTextContainer = document.getElementById("generated-text");
+
+        if (paraCount > 1) {
+
+            for (var i = 0; i < paraCount; i++) {
+                loremGen[i] = '';
+                for (var j = wordCount - 1; j >= 0; j--) {
+                    wordGenerated = lorems[Math.floor(Math.random()*lorems.length)];
+                    console.log(wordGenerated);
+                    loremGen[i] += wordGenerated + ' ';
+                };
+            };
+
+            for (var i = loremGen.length - 1; i >= 0; i--) {
+                console.log(i)
+                multiPara += '\n';
+                multiPara += upperParag(loremGen[i].slice(0, - 1)+'.');
+                multiPara += '\n';
+            };
+
+            generatedTextContainer.innerHTML = multiPara;
+
+        } else {
+
+            for (var i = wordCount - 1; i >= 0; i--) {
+                loremGen[0] += lorems[Math.floor(Math.random()*lorems.length)] + ' ';
+            };
+
+            generatedTextContainer.innerHTML = '' + upperParag(lorems[0]+' '+lorems[1]+' '+lorems[2]+' '+loremGen[0].slice(0, - 1)+'.') + '';
+        }
+
+
+        console.log(paraCount);
+
+    }
+
+    function upperParag(string)
+    {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+</script>

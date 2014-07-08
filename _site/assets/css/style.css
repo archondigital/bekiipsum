@@ -1,0 +1,190 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700);
+
+html, body {height: 100%; width: 100%;}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto Slab', serif;
+  font-weight: bold;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  line-height: 1.4;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: 0px 0px 10px rgba(0,0,0,0.10);
+}
+
+.content {padding-top: 1.25rem;}
+.alapeanutbuttersandwiches {
+    display: none; 
+    /*-webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;*/
+    }
+.poof {display: block;}
+
+p.lead {font-size: 1.51875rem; line-height: 1.4;}
+
+ul.pagination {  display: inline-block;}
+
+p.caption {font-size: 80%;}
+
+.social {min-height: 60px; margin-bottom: 1.25rem;}
+.share-tweet, .share-fb, .share-google, .share-su, .share-pin {height: auto; float: right; margin-right: 1.25rem;}
+.share-pin {margin-top: 37px;}
+/*.fb-like.fb_iframe_widget {position: absolute !important; top: 0 !important;}*/
+
+/* Add Class for Images */
+  img.offgrid-right {max-width: 150%; margin-right: -45%;}
+  img.offgrid-left {max-width: 150%; margin-left: -45%;}
+  img.alignright { float: right; margin: 0 0 18px 18px; }
+  img.alignleft { float: left; margin: 0 18px 18px 0; }
+  img.aligncenter { display: block; margin: 18px auto; }
+
+#nav-main {
+  z-index: 20;
+  width: 100%;
+  -webkit-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.10);
+  -moz-box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.10);
+  box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.10);
+}
+
+  .top-bar .title-area { position: relative; margin: 0 auto; width: 280px; float: none; text-align: center;  }
+  .top-bar .title-area h1 {font-size: 1.25rem; font-weight: 700;}
+  .top-bar .title-area h1 a span {color: #666;}
+  .top-bar-section ul.nav-sitewide {display: block;}
+    .home .top-bar-section ul.nav-sitewide {display: none; visibility: visible;}
+  .top-bar-section ul.nav-home {display: none; visibility: visible;}    
+    .home .top-bar-section ul.nav-home {display: block;}
+
+  .sticky.fixed .top-bar {opacity: .98;}
+  .top-bar {z-index: 99;}
+
+.h70 {position: relative; height: 70%; width: 100%;}
+.h30 {position: relative; height: 30%; width: 100%;}
+
+.fullscreen {position: relative; height: 100%; width: 100%;}
+  .fullscreen .orbit-container {height: 100%;}
+  .fullscreen .orbit-container ul {height: 100%;}
+    .fullscreen .orbit-container ul li {height: 100%;}
+    .fullscreen .orbit-container ul li .orbit-slide {height: 70%; background-position: center; background-size: cover;}
+    .fullscreen .orbit-container ul li .orbit-slide h1 {width: 100%; margin: 0 auto; text-align: center; padding-top: 10%; color: #fff; font-size: 4em;}
+    .fullscreen .orbit-container ul li .orbit-slide p {width: 30%; margin: 0 auto; color: #fff; font-size: 2em; text-align: center; margin-bottom: 40px;}
+
+.button.transparent {
+background-color: transparent;
+border-color: #fff;
+border-width: 3px; 
+color: #fff;
+  font-family: 'Roboto Slab', serif;
+  font-weight: bold;
+  font-style: normal;
+  font-size: .9em;
+  text-rendering: optimizeLegibility;
+  line-height: 1.4;
+}
+
+
+
+#generated-text {padding-top: 10px;}
+#generated-text p {font-size: 90%; color: #999;}
+textarea#generated-text {font-size: 90%; color: #999; min-height: 400px;}
+
+#masthead.fullscreen {height: 110%;}
+  #masthead.fullscreen .orbit-container ul li {height: 95%; background-position: center; background-size: cover;}
+
+  #masthead .orbit-caption {padding: 1.25rem; height: 30%; background: #fff;} 
+  #masthead .orbit-caption p {color: #000;} 
+
+#masthead .orbit-container .orbit-prev, #masthead .orbit-container .orbit-next {top: 84.5%; background-color: rgba(0,0,0,0.2);}  
+  
+.fullwidth { max-width: 100%;}
+
+.page, .post {padding: 90px 0;}
+
+.archives article {height: 100%;}
+.archives header {height: 100%; background: #000;}
+  .archives header h1 {font-size: 6rem; color: #fff; position: absolute; bottom: 50%;}
+  .archives #content {padding-top: 90px;}
+.archives ul.archive {display:block; min-height: 160px;}
+
+#gora {padding-top: 90px;}
+
+#about, #projects, #blog {padding-top: 160px; margin: 0;}
+  
+  
+  #about h1, #projects h1, #blog h1 {}
+  #about h1 {position: absolute; bottom: 0; font-size: 6em; opacity: 0.1;}
+  #about h1, #about h2, #about p {color: #fff; text-shadow: 0px 0px 10px rgba(0,0,0,0.40);}
+
+  #about {
+    background-image: url(/assets/images/bnr-slide-neb-grayscale.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .about .panel {position: absolute; bottom: 120px; width: 100%; background: rgba(0,0,0,0.5); border: none;}
+
+.articles {position: relative;}
+.articles article {background-size: cover; background-attachment: fixed; border-bottom: 1px #f1f1f1 solid;}
+  .articles article.light, .articles article.dark {border-bottom: none;}
+  
+  .articles article .container {padding: 1.25rem; overflow: hidden; height: 100%;}
+    
+    .articles article h1 a, .articles article p, .articles article a, .articles article .post-date {color:#666; }
+    .articles article.light h1 a, .articles article.light p, .articles article.light a, .articles article.light .post-date {color:#fff;}
+    .articles article.dark h1 a, .articles article.dark p, .articles article.dark a, .articles article.dark .post-date {color:#333;}
+
+.github-icon-svg,
+.twitter-icon-svg {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: 3px;
+}
+
+.site-footer {position: relative; width: 100%; background: transparent; padding:1.25rem;}
+  .site-footer h2, .site-footer p {font-size: 80%;}
+  .site-footer h2, .site-footer p, .site-footer a {color: #d7d7d7;}
+  
+
+
+// Small screens
+@media only screen { } /* Define mobile styles */
+
+@media only screen and (max-width: 40em) { 
+  .fullscreen {height: 80%;}
+  .about.fullscreen {height: auto;}
+  #about h1 {position: relative; bottom: initial; font-size: 3em; opacity: 0.5;}
+  .about .panel {position: relative; bottom: initial; width: 100%; background: rgba(0,0,0,0.5); border: none;}
+  .articles article {}
+  } /* max-width 640px, mobile-only styles, use when QAing mobile issues */
+
+// Medium screens
+@media only screen and (min-width: 40.063em) { } /* min-width 641px, medium screens */
+
+@media only screen and (min-width: 40.063em) and (max-width: 64em) { } /* min-width 641px and max-width 1024px, use when QAing tablet-only issues */
+
+// Large screens
+@media only screen and (min-width: 64.063em) {
+  .articles article {height: 400px;}
+ } /* min-width 1025px, large screens */
+
+@media only screen and (min-width: 64.063em) and (max-width: 90em) {
+  .articles article {height: 400px;}
+ } /* min-width 1025px and max-width 1440px, use when QAing large screen-only issues */
+
+// XLarge screens
+@media only screen and (min-width: 90.063em) { 
+  .articles article {height: 400px;}
+  } /* min-width 1441px, xlarge screens */
+
+@media only screen and (min-width: 90.063em) and (max-width: 120em) { 
+  .articles article {height: 400px;}
+  } /* min-width 1441px and max-width 1920px, use when QAing xlarge screen-only issues */
+
+// XXLarge screens
+@media only screen and (min-width: 120.063em) {
+  .articles article {height: 400px;}
+ } /* min-width 1921px, xxlarge screens */

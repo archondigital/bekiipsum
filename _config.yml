@@ -1,0 +1,19 @@
+# Site settings
+title: bekiipsum.com
+email: overlord@archon-digital.com
+description: "Ang Beking Lorem Ipsum generator. Beki Ipsum Generator"
+baseurl: "http://bekiipsum.com"
+url: ""
+username: bekiipsum
+timezone: Asia/Manila
+paginate: 8
+paginate_path: "articles/:num"
+port: 8000
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+
+gems:
+- jekyll-redirect-from
+#   - jekyll-sitemap

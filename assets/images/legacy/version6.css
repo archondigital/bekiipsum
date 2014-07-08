@@ -1,0 +1,220 @@
+@charset "UTF-8";
+/* CSS Document */
+body.postid-1.singular #primary {margin-top:0;}
+body.postid-1.singular .entry-header {
+	background-image: none !important;
+	margin: -30px 0 100px 0 !important;
+	padding: 0 !important;
+	background-color: transparent !important;
+	height: 260px;
+	width: 940px;
+}
+
+body.postid-1 #content,
+body.postid-1.singular #content {
+	margin: 0 auto !important;
+	position: relative;
+	width: 940px !important;	
+}
+
+body.postid-1 #primary {
+	background-image: url(http://archondigital.com/wp-content/uploads/version-6-bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center top;
+	background-color:#ffdc90;
+}
+body.postid-1 #primary article h1 {
+	height: 260px;
+	width: 110px;
+	clear: both;
+	margin-right: auto;
+	margin-left: auto;
+	font-size: 1%;
+	text-indent: -99999px;
+	position: relative;
+	margin-top: 95px;
+}
+
+body.postid-1 #primary div.entry-content {
+	width: 940px;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+	padding-top: 400px;
+}
+
+body.postid-1 #primary div.entry-content h2 {
+	font-family: 'Arvo', arial, serif;
+	margin-top: 60px;
+	margin-bottom: 60px;
+	font-size:22px;
+	font-weight: normal;
+}
+body.postid-1 #primary div.entry-content p {
+	font-family: 'Arvo', arial, serif;
+	margin-bottom: 20px;
+	font-size:14px;
+	line-height: 22px;
+}
+
+body.postid-1 #primary div.col1 {
+	clear: both;
+}
+
+body.postid-1 #primary div.col1 p, body.postid-1 #primary div.col3 p {	width: 460px; margin-left:240px;}
+
+body.postid-1 #primary div.col1 h2, body.postid-1 #primary div.col3 h2 {width: 700px; margin-left:240px;}
+
+body.postid-1 #primary div.col2 {
+	width: 300px;
+	float:left;	
+}
+body.postid-1 #primary div#adzone1 {
+	float: left;
+	margin-left: 80px;
+	margin-right: 20px;
+	z-index:40;
+}
+
+body.postid-1 #primary div.col3 {
+	clear: both;
+	width: 940px;
+	margin-right: auto;
+	margin-left: auto;
+	background-image: url(http://archondigital.com/wp-content/uploads/version-6-bg2.jpg);
+	background-repeat: no-repeat;
+}
+body.postid-1 #primary div.col4 {
+	clear: both;
+	width: 460px;
+	margin-right: auto;
+	margin-left: auto;
+}
+body.postid-1 #primary div.clear {
+	clear: both;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+body.postid-1 header .entry-meta {
+	clear: both;
+	font-size: 11px;
+	padding: 5px;
+	top: -3px !important;
+	color:#222 !important;
+}
+body.postid-1 header .entry-meta a {
+	color:#222 !important;
+}
+
+body.postid-1 #nav-single {
+top: -33px;
+text-align: right;
+width: 30%;
+z-index: 80;
+position: absolute;
+right: 0;
+}
+
+body.postid-1 #content nav a {
+color: #222;
+}
+
+body.postid-1 #content nav a:hover {
+color: #fff;
+}
+
+body.postid-1 #primary footer.entry-meta, body.postid-1 #primary .entry-utility {
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+	font-size: 11px;
+	padding: 0;
+}
+
+body.postid-1 #primary section#discussion {
+	background-color: #e5c681;	
+}
+body.postid-1 #primary section#discussion li {	border-top-color: #f2d189; }
+
+
+/* =Responsive Structure
+----------------------------------------------- */
+
+@media (max-width: 800px) {
+
+body.postid-1 {
+	overflow-x: hidden;
+
+}
+
+
+body.postid-1 #primary div.entry-content {
+	width: 100% !important;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+}
+body.postid-1 #primary div.entry-content h2, body.postid-1 #primary div.entry-content h2, body.postid-1 #primary div.entry-content p { width:95% !important; margin-left:0 !important; margin-right:0 !important;}
+
+
+body.postid-1 #primary div.col1, body.postid-1 #primary div.col2, body.postid-1 #primary div.col3, body.postid-1 #primary div.col4, body.postid-1 #primary div#adzone1 { width:100% !important; margin-left:0 !important; margin-right:0 !important; }	
+
+}
+@media (max-width: 650px) {
+	/* @media (max-width: 650px) Reduce font-sizes for better readability on smaller devices */
+body.postid-1 {
+	overflow-x: hidden;
+
+}
+
+body.postid-1 #primary div.entry-content {
+	width: 100% !important;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+}
+body.postid-1 #primary div.entry-content h2, body.postid-1 #primary div.entry-content p { width:95% !important; margin-left:0 !important; margin-right:0 !important;}
+
+
+body.postid-1 #primary div.col1, body.postid-1 #primary div.col2, body.postid-1 #primary div.col3, body.postid-1 #primary div.col4, body.postid-1 #primary div#adzone1 { width:100% !important; margin-left:0 !important; margin-right:0 !important; }	
+}
+@media (max-width: 450px) {
+
+body.postid-1 {
+	overflow-x: hidden;
+
+}
+
+body.postid-1 #primary div.entry-content {
+	width: 100% !important;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+}
+body.postid-1 #primary div.entry-content h2, body.postid-1 #primary div.entry-content p { width:95% !important; margin-left:0 !important; margin-right:0 !important;}
+
+
+body.postid-1 #primary div.col1, body.postid-1 #primary div.col2, body.postid-1 #primary div.col3, body.postid-1 #primary div.col4, body.postid-1 #primary div#adzone1 { width:100% !important; margin-left:0 !important; margin-right:0 !important; }	
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+
+body.postid-1 {
+	overflow-x: hidden;
+
+}
+
+body.postid-1 #primary div.entry-content {
+	width: 100% !important;
+	margin-right: auto;
+	margin-left: auto;
+	clear: both;
+}
+body.postid-1 #primary div.entry-content h2, body.postid-1 #primary div.entry-content p { width:95% !important; margin-left:0 !important; margin-right:0 !important;}
+
+
+body.postid-1 #primary div.col1, body.postid-1 #primary div.col2, body.postid-1 #primary div.col3, body.postid-1 #primary div.col4, body.postid-1 #primary div#adzone1 { width:100% !important; margin-left:0 !important; margin-right:0 !important; }	
+}
+
+

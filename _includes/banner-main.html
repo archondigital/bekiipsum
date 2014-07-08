@@ -1,0 +1,39 @@
+<div id="masthead" class="fullscreen">
+	<ul class="example-orbit" data-orbit data-options="bullets: false; navigation_arrows: false; slide_number: false;">
+	{% for post in site.posts %}
+		{% if post.featured == true %}
+		{% capture count %}{{ count | plus: '3' }}{% endcapture %}
+		{% if count >= '1' %}
+	
+		<li>
+			<div class="orbit-slide" style="background-image: url({{ post.featured_image | prepend: site.baseurl }});">
+				<h1>{{ post.title }}</h1>
+				<p>Ang bukod-tanging dummy text generator ng mga Beki.</p>
+				<p><a href="#gora" class="button transparent round">&nbsp;&nbsp;&nbsp;   gora!   &nbsp;&nbsp;&nbsp;</a></p>
+			</div>
+
+			<div class="content">
+				<div class="row">
+					<div class="large-4 columns large-push-2 text-right">
+						{% include snippet-social.html %}
+						
+					</div>
+					<div class="large-4 large-pull-2 columns text-left">
+						{% include adzone01.html %}
+						
+					</div>					
+				</div>
+			</div>
+
+		</li>
+
+		{% endif %}	
+		{% endif %}				
+	{% endfor %}
+
+	</ul>    
+
+
+
+</div>
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+  	{% include head.html %}
+
+	<body>
+    {% include analytics.html %}
+    
+    
+{% if paginator.page != 1 %}
+    
+    {% include scripts-body.html %}
+	{% include header.html %}
+    {{ content }}
+    {% include footer.html %}
+    {% include modal-contact.html %}
+    {% include scripts-footer.html %}
+    
+{% else %}
+
+    {% include scripts-body-home.html %}
+    {% include header-home.html %}
+	{% include banner-main.html %}
+    
+    {% include snippet-gora.html %}
+    {{ content }}
+    {% include footer.html %}
+    {% include modal-contact.html %}
+    {% include scripts-footer-home.html %}    
+
+{% endif %}
+
+
+
+    </body>
+</html>

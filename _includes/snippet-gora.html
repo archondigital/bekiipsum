@@ -1,0 +1,39 @@
+<div id="gora">
+	<div class="row fullwidth">
+		<div class="large-6 columns text-right">
+			<h1>Beki Ipsum Generator</h1>
+		</div>
+	</div>
+	<div class="row fullwidth">
+		<div class="large-4 columns large-push-2 text-right">
+			
+			<p class="lead">Input how many words or paragraphs of Bekinese you want and press <strong>generate</strong>. Copy the generated text on the right side of the screen to your clipboard.</p>
+			<form method="get" action="#gora">
+			    <label for="wordCount" class="text-left">Number of Words<input type="text" name="wordCount" value="100"></label>
+			    <label for="paraCount" class="text-left">Number of Paragraphs<input type="text" name="paraCount" value="0"></label>
+			    <a href="{{ site.baseurl }}/#gora" class="button secondary round">Reset</a>
+			    <button class="button round">Generate</button>
+			</form>	
+
+			<div class="hide-for-medium-down">
+				<h3>Huwaat ang Bekinese anech? <br><small>/What is Bekinese?</small></h3>
+				<p>Ayon sa <a href="http://en.wikipedia.org/wiki/Swardspeak">Wikipedia</a>, ang Bekinese ay Swardspeak o isang uri ng gay lingo na ginagamit sa Pilipinas.</p>
+				
+				<h3>Huwaat ang kalurkey na Lorem Ipsum churvaness? <br><small>/What is a dummy text generator?</small></h3>
+				<p>Sa linya ng paglilimbag at graphic design ginagamit ang Lorem ipsum bilang <em>dummy text</em> o <em>filler text</em> upang mai-halimbawa ang magiging itsura ng latag ng isang peryodiko o trabaho. Ang <em>Lorem ipsum dolor sit amet</em> ay hango sa wikang Latin at ang orihinal na teksto nito ay nailimbag nuong 45 B.C. sa klasikal na literatura nuong panahon na iyon, ayon sa <a href="http://www.lipsum.com/">lipsum.com</a>.</p>
+
+				<h3>Sinetch ang behind ditey? <br><small>/Colophon</small></h3>
+				<p>Ang website na ito ay bunga ng walang kwentang pagiisip ng ilang mga nilalalng habang nagpapalipas ng trapik bago makauwi mula sa opisina.</p>
+				<p>Ginawa ito sa loob ng isa't kalahating oras ng dalawang matipuno ngunit medyo <a href="http://tunaynalalake.blogspot.com/2009/04/cholo-goitia-under-consideration.html">under consideration</a> na mga lalake na si <a href="http://archondigital.com">@archondigital</a> at si <a href="http://pixeltracer.com">@pixeltracer</a>. (Under consideration pa din ang dalawa kahit nag cite sila ng <a href="http://tunaynalalake.blogspot.com/2009/05/poll-winner-john-lloyd-ama-ng-trabaho.html">John Lloyd rule</a> dahil kahit paikut-ikutin mo, ginawa pa din nila ang pahinang ito, at ginawa nila ito labas sa oras ng trabaho.)</p>
+				<p>Ang Bekinese ay isinalin at inilapat ni @smoileh na siyang pinagmulan ng <em>Lorem ipsum keme keme</em> sa kanyang mga <em>compre</em>. Lubos din po kaming nagpapasalamat sa aming spiritual adviser na si @pochologoitia.</p>				
+			</div>
+
+		</div>
+		<div class="large-6 columns text-left">
+			{% include adzone02.html %}
+			<br>
+			<textarea id="generated-text"></textarea>
+			
+		</div>
+	</div>	
+</div>

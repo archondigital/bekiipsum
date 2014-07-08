@@ -1,0 +1,1 @@
+var E=Ext.lib.Event;function getTarget(a){return E.getTarget(a)}function getPageXY(a){return[E.getPageX(a),E.getPageY(a)]}function preventDefault(a){E.preventDefault(a)}function keyCode(a){return E.getCharCode(a)}function addEvent(c,b,a){E.addListener(c,name,a)}function removeEvent(c,b,a){E.removeListener(c,name,a)};

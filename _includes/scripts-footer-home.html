@@ -1,0 +1,67 @@
+<script src="{{ site.url }}/assets/bower_components/foundation/js/vendor/jquery.js"></script>
+<script src="{{ site.url }}/assets/bower_components/foundation/js/vendor/fastclick.js"></script>
+<script src="{{ site.url }}/assets/bower_components/foundation/js/foundation.min.js"></script>
+
+<script src="{{ site.url }}/assets/js/vendor/jquery.stellar.min.js"></script>
+
+<script src="{{ site.url }}/assets/js/vendor/waypoints.min.js"></script>
+<script src="{{ site.url }}/assets/js/vendor/waypoints-sticky.min.js"></script>
+<script src="{{ site.url }}/assets/js/vendor/jquery.autosize.min.js"></script>
+
+
+<!-- stellar -->
+<script>
+$(document).foundation();
+
+
+$.stellar();
+
+$('a[href*=#]:not([href=#])').click(function() {
+	if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+	  var target = $(this.hash);
+	  target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+	  if (target.length) {
+	    $('html,body').animate({
+	      scrollTop: target.offset().top
+	    }, 500);
+	    return false;
+	  }
+	}
+});
+
+$(document).ready(function(){ 
+	$('#about').waypoint(function(direction) {
+		$( ".article" ).removeClass( "alapeanutbuttersandwiches" ).addClass( "poof" );
+	});
+});
+
+
+
+$('textarea').on('focus', function(){
+    $(this).autosize();
+});
+
+</script>
+
+{% include scripts-lorem.html %}
+
+<!-- Google +1 -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+<!-- Stumbleupon -->
+<script type="text/javascript">
+  (function() {
+    var li = document.createElement('script'); li.type = 'text/javascript'; li.async = true;
+    li.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + '//platform.stumbleupon.com/1/widgets.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(li, s);
+  })();
+</script>
+
+<!-- Pinterest -->
+<script type="text/javascript" async src="//assets.pinterest.com/js/pinit.js"></script>

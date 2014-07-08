@@ -1,0 +1,1 @@
+S.html=function(a,b){this.obj=a;this.id=b;this.height=a.height?parseInt(a.height,10):300;this.width=a.width?parseInt(a.width,10):500};S.html.prototype={append:function(a,b){var c=document.createElement("div");c.id=this.id;c.className="html";c.innerHTML=this.obj.content;a.appendChild(c)},remove:function(){var a=get(this.id);if(a){remove(a)}}};
