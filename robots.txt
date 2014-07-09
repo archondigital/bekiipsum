@@ -1,4 +1,4 @@
-Sitemap: http://archondigital.com/sitemap.xml
+Sitemap: http://bekiipsum.com/sitemap.xml
 
 User-agent: *
 Disallow: /cgi-bin
