@@ -91,7 +91,7 @@ color: #fff;
 #generated-text p {font-size: 90%; color: #999;}
 textarea#generated-text {font-size: 90%; color: #999; min-height: 400px;}
 
-#masthead {background: #c5222d; padding: 1.25rem 1.25rem 5rem 1.25rem;}
+#masthead {min-height: 65%; background: #c5222d; padding: 1.25rem 1.25rem 5rem 1.25rem;}
 
 #masthead.fullscreen {height: 110%;}
 
