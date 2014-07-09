@@ -106,6 +106,8 @@ textarea#generated-text {font-size: 90%; color: #999; min-height: 400px;}
 #masthead .orbit-container .orbit-prev, #masthead .orbit-container .orbit-next {top: 84.5%; background-color: rgba(0,0,0,0.2);}  
 
 #share {padding-bottom: 6rem;}
+
+#display {padding-top: 90px;}
   
 .fullwidth { max-width: 100%;}
 
