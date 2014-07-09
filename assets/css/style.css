@@ -162,6 +162,9 @@ textarea#generated-text {font-size: 90%; color: #999; min-height: 400px;}
 @media only screen { } /* Define mobile styles */
 
 @media only screen and (max-width: 40em) { 
+  #masthead h1 {font-size: 2em;}
+  #masthead p {font-size: 1em;}
+
   .fullscreen {height: 80%;}
   .about.fullscreen {height: auto;}
   #about h1 {position: relative; bottom: initial; font-size: 3em; opacity: 0.5;}
