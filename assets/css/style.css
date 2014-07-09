@@ -95,7 +95,7 @@ textarea#generated-text {font-size: 90%; color: #999; min-height: 400px;}
 
 #masthead.fullscreen {height: 110%;}
 
-  #masthead h1 {margin: 0 auto; text-align: center; padding-top: 3%; color: #fff; font-size: 4em;}
+  #masthead h1 {margin: 0 auto; text-align: center; padding-top: 10%; color: #fff; font-size: 4em;}
   #masthead p {margin: 0 auto; color: #fff; font-size: 2em; text-align: center; margin-bottom: 40px;}
 
   #masthead.fullscreen .orbit-container ul li {height: 95%; background-position: center; background-size: cover;}
