@@ -2,10 +2,9 @@
 <script src="{{ site.url }}/assets/bower_components/foundation/js/vendor/fastclick.js"></script>
 <script src="{{ site.url }}/assets/bower_components/foundation/js/foundation.min.js"></script>
 
-<script src="{{ site.url }}/assets/js/vendor/jquery.stellar.min.js"></script>
-
-<script src="{{ site.url }}/assets/js/vendor/waypoints.min.js"></script>
-<script src="{{ site.url }}/assets/js/vendor/waypoints-sticky.min.js"></script>
+<!-- <script src="{{ site.url }}/assets/js/vendor/jquery.stellar.min.js"></script> -->
+<!-- <script src="{{ site.url }}/assets/js/vendor/waypoints.min.js"></script>
+<script src="{{ site.url }}/assets/js/vendor/waypoints-sticky.min.js"></script> -->
 <script src="{{ site.url }}/assets/js/vendor/jquery.autosize.min.js"></script>
 
 
@@ -14,7 +13,7 @@
 $(document).foundation();
 
 
-$.stellar();
+//$.stellar();
 
 $('a[href*=#]:not([href=#])').click(function() {
 	if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -29,11 +28,11 @@ $('a[href*=#]:not([href=#])').click(function() {
 	}
 });
 
-$(document).ready(function(){ 
-	$('#about').waypoint(function(direction) {
-		$( ".article" ).removeClass( "alapeanutbuttersandwiches" ).addClass( "poof" );
-	});
-});
+// $(document).ready(function(){ 
+// 	$('#about').waypoint(function(direction) {
+// 		$( ".article" ).removeClass( "alapeanutbuttersandwiches" ).addClass( "poof" );
+// 	});
+// });
 
 
 
