@@ -68,7 +68,7 @@ p.caption {font-size: 80%;}
   .fullscreen .orbit-container {height: 100%;}
   .fullscreen .orbit-container ul {height: 100%;}
     .fullscreen .orbit-container ul li {height: 100%;}
-    .fullscreen .orbit-container ul li .orbit-slide {height: 70%; background-position: center; background-size: cover;}
+    .fullscreen .orbit-container ul li .orbit-slide {height: 70%; background-size: cover; background-position:bottom center;}
     .fullscreen .orbit-container ul li .orbit-slide h1 {width: 100%; margin: 0 auto; text-align: center; padding-top: 10%; color: #fff; font-size: 4em;}
     .fullscreen .orbit-container ul li .orbit-slide p {width: 30%; margin: 0 auto; color: #fff; font-size: 2em; text-align: center; margin-bottom: 40px;}
 
