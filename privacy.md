@@ -6,7 +6,7 @@ permalink: /about/privacy/
 
 
 
-<p class="lead">I am respectful and deeply committed to safeguarding your privacy while online at my site <a href="http://archondigital.com">http://archondigital.com</a>. The following discloses the information gathering and dissemination practices for this Web site.</p>
+<p class="lead">I am respectful and deeply committed to safeguarding your privacy while online at my site <a href="http://bekiipsum.com">http://bekiipsum.com</a>. The following discloses the information gathering and dissemination practices for this Web site.</p>
 
 ### Log Files
 
@@ -29,4 +29,4 @@ I use an internal ad server and outside ad companies to display ads on my site. 
 
 ### Contact Information
 
-If users have any questions or suggestions regarding my privacy policy, please contact me by filling up the [contact form](http://archondigital.com/contact).
+If users have any questions or suggestions regarding my privacy policy, please contact me by filling up the [contact form](http://bekiipsum.com/contact).
