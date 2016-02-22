@@ -2,13 +2,12 @@
 title: bekiipsum.com
 email: overlord@archon-digital.com
 description: "Ang bukod-tanging dummy text generator ng mga Beki. Ito and Bekiipsum.com - Lorem ipsum keme keme."
-baseurl: "http://bekiipsum.com"
-url: ""
+baseurl: ""
+url: "http://bekiipsum.com"
 username: bekiipsum
 timezone: Asia/Manila
 paginate: 8
 paginate_path: "articles/:num"
-port: 8000
 
 # Build settings
 markdown: kramdown
@@ -16,4 +15,5 @@ permalink: pretty
 
 gems:
 - jekyll-redirect-from
+- jekyll-paginate
 #   - jekyll-sitemap
