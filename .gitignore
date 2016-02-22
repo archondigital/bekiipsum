@@ -2,3 +2,5 @@ _site
 _drafts
 _posts-on-hold
 .sass-cache
+
+.DS_Store
