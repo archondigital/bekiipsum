@@ -1,8 +1,8 @@
 # bekiipsum.com
 
 Ang beking lorem ipsum generator: Bekinese (Swardspeak) dummy text for your layouts.
-It started in 2014 as a Jekyll site (see git history). Since v2 it's **Astro on Cloudflare Workers**, with content from the shared Payload CMS at
-[cms.corecastdigital.com](https://cms.corecastdigital.com) (site slug `bekiipsum`).
+It started in 2014 as a Jekyll site (see git history). Since v2 it's **Astro on Cloudflare Workers**, with content from the shared Payload CMS
+(site slug `bekiipsum`). Its address comes from the `CMS_URL` environment variable.
 
 ## What lives where
 

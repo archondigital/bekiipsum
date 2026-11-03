@@ -5,7 +5,7 @@ import { fallbackDictionaries } from "@data/fallback";
 import { lines } from "@lib/generator";
 
 /**
- * Content from the shared Payload CMS (cms.corecastdigital.com), scoped to site "bekiipsum".
+ * Content from the shared Payload CMS (base URL from the CMS_URL env), scoped to site "bekiipsum".
  * Published-only, fetched at build time. Fallbacks are used when the CMS is unreachable
  * (and, for dictionaries / home copy, when the site has none yet — see src/lib/site.ts).
  */

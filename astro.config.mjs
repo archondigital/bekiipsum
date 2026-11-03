@@ -5,7 +5,7 @@ import { getRedirects } from "@corecastdigital/cms/redirects";
 import { getSitemapOptions } from "@corecastdigital/cms/sitemap";
 
 // bekiipsum.com — Bekinese lorem ipsum generator. Content: Payload site "bekiipsum"
-// (cms.corecastdigital.com). Hosting: Cloudflare Workers — every page is a static asset;
+// (base URL from the CMS_URL env). Hosting: Cloudflare Workers — every page is a static asset;
 // only /preview/* (Payload draft preview) runs in the Worker.
 const SITE_SLUG = process.env.SITE_SLUG || "bekiipsum";
 const SITE_URL = "https://bekiipsum.com";
@@ -40,5 +40,5 @@ export default defineConfig({
     // @corecastdigital/* ship .astro/.ts source: compile them, don't externalize.
     ssr: { noExternal: [/^@corecastdigital\//] },
   },
-  image: { domains: ["r2.corecastdigital.com", "cms.corecastdigital.com"] },
+  image: { domains: ["r2.corecastdigital.com"] },
 });
