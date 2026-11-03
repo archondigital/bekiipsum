@@ -3,6 +3,7 @@
  * The generator (hero). Renders a sample at build time, so there's real Bekinese on screen
  * before JS runs; the script below regenerates from the form. Settings live in the URL
  * (?mode=&count=&opening=&html=&dict=), and the 2014 links (?wordCount=&paraCount=) still work.
+ * "Allow NSFW" is never read from or written to the URL: a shared link always opens safe for work.
  */
 import { generate, seeded, LIMITS, wordCount, type Dictionary } from "@lib/generator";
 
@@ -12,7 +13,8 @@ interface Props {
 }
 const { dictionaries, tagline } = Astro.props;
 const dict = dictionaries[0];
-const initial = { mode: "paragraphs" as const, count: LIMITS.paragraphs.default, opening: true, html: false };
+const initial = { mode: "paragraphs" as const, count: LIMITS.paragraphs.default, opening: true, html: false, nsfw: false };
+const hasNsfw = dictionaries.some((d) => d.nsfwWords?.length);
 const paras = generate(dict, initial, seeded(2014));
 const words = wordCount(paras);
 ---
@@ -54,6 +56,7 @@ const words = wordCount(paras);
       <div class="field toggles">
         <label class="opt"><input type="checkbox" name="opening" checked data-opening /><span>Start with “{dict.opening || "Lorem ipsum keme keme"}”</span></label>
         <label class="opt"><input type="checkbox" name="html" data-html /><span>Wrap in &lt;p&gt; tags</span></label>
+        {hasNsfw && <label class="opt"><input type="checkbox" name="nsfw" autocomplete="off" data-nsfw /><span>Allow NSFW</span></label>}
       </div>
 
       <button class="btn-gora" type="submit" data-gora><span data-gora-label>Generate</span><span class="gora-dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -83,6 +86,8 @@ const words = wordCount(paras);
   const dictEl = root.querySelector<HTMLInputElement | HTMLSelectElement>("[data-dict]")!;
   const opening = root.querySelector<HTMLInputElement>("[data-opening]")!;
   const html = root.querySelector<HTMLInputElement>("[data-html]")!;
+  const nsfw = root.querySelector<HTMLInputElement>("[data-nsfw]"); // absent when no dictionary has NSFW words
+  if (nsfw) nsfw.checked = false; // never restored by the browser (back/forward cache, form restore)
   const out = root.querySelector<HTMLElement>("[data-output]")!;
   const meta = root.querySelector<HTMLElement>("[data-meta]")!;
   const status = root.querySelector<HTMLElement>("[data-status]")!;
@@ -183,7 +188,7 @@ const words = wordCount(paras);
     const n = clampCount(m, count.value);
     count.value = range.value = String(n);
     const d = dicts.find((x) => x.slug === dictEl.value) ?? dicts[0];
-    current = generate(d, { mode: m, count: n, opening: opening.checked, html: html.checked });
+    current = generate(d, { mode: m, count: n, opening: opening.checked, html: html.checked, nsfw: nsfw?.checked === true });
     const q = new URLSearchParams({ mode: m, count: String(n) });
     if (!opening.checked) q.set("opening", "0");
     if (html.checked) q.set("html", "1");
@@ -243,6 +248,7 @@ const words = wordCount(paras);
   count.addEventListener("input", () => (range.value = count.value));
   html.addEventListener("change", () => { if (goraBtn.classList.contains("is-busy")) return; render(); });
   opening.addEventListener("change", () => run());
+  nsfw?.addEventListener("change", () => run());
   dictEl.addEventListener("change", () => run());
   form.addEventListener("submit", (e) => {
     e.preventDefault();

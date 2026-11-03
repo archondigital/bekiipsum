@@ -1,13 +1,17 @@
 /**
  * Dummy-text generator. Pure functions, used at build time (the text shown before JS runs)
  * and in the browser. A dictionary comes from Payload → Dictionaries (or src/data/fallback.ts).
+ * Output is safe for work unless Options.nsfw is set; then `nsfwWords` join the pool.
  */
 export type Dictionary = {
   slug: string;
   name: string;
   description?: string | null;
   opening?: string | null;
+  /** Safe-for-work vocabulary (the default). */
   words: string[];
+  /** Vulgar words, mixed in only when Options.nsfw is on. */
+  nsfwWords?: string[];
   connectors: string[];
   connectorRatio: number;
   isDefault?: boolean;
@@ -22,6 +26,8 @@ export type Options = {
   opening: boolean;
   /** Wrap paragraphs in <p> tags. */
   html: boolean;
+  /** Mix the dictionary's NSFW words in with the safe ones. Off unless the visitor opts in. */
+  nsfw?: boolean;
 };
 
 export const LIMITS: Record<Mode, { min: number; max: number; default: number }> = {
@@ -85,7 +91,8 @@ function paragraph(d: Dictionary, rnd: () => number, lead?: string): string {
 }
 
 /** Returns paragraphs (plain strings). */
-export function generate(d: Dictionary, o: Options, rnd: () => number = Math.random): string[] {
+export function generate(dict: Dictionary, o: Options, rnd: () => number = Math.random): string[] {
+  const d = o.nsfw && dict.nsfwWords?.length ? { ...dict, words: [...dict.words, ...dict.nsfwWords] } : dict;
   const count = clampCount(o.mode, o.count);
   const lead = o.opening && d.opening ? d.opening : undefined;
 
