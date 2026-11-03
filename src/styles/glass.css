@@ -1,20 +1,13 @@
 /*
- * bekiipsum.com — "beki pageant stage" glassmorphism.
- * Frosted panels float over slow stage lights (magenta, mango, kobalt). One panel — the
+ * bekiipsum.com — "beki pageant stage" glassmorphism, monochrome per theme.
+ * Frosted panels float over slow stage lights. One panel — the
  * generator output — gets the iridescent edge; everything else stays quiet.
  * Sizes in rem: CoreFramework sets html to 62.5%, so 1rem = 10px.
  */
 
 /* ---------- tokens ---------- */
+/* Monochrome by theme: hot pink on glass (light), shades of purple (dark). */
 :root {
-  --gabi: #1a0b2e; /* stage (night) */
-  --blush: #fce4f1; /* stage (day) */
-  --bongga: #ff2e93; /* magenta */
-  --mango: #ffb21a;
-  --kobalt: #2e5bff;
-  --calamansi: #b6f23a;
-  --ink: #2a0f3d;
-
   --font-display: "Shrikhand", "Cooper Black", Georgia, serif;
   --font-body: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;
 
@@ -25,39 +18,59 @@
   --gutter: clamp(1.6rem, 4vw, 4rem);
 }
 
-/* Day stage (light) */
+/* Light: hot pink */
 :root,
 :root.cf-theme-light {
-  --stage: var(--blush);
-  --text-strong: var(--ink);
-  --text: #4a2a5c;
-  --text-soft: #6e4f80;
-  --glass-fill: rgba(255, 255, 255, 0.52);
-  --glass-fill-strong: rgba(255, 255, 255, 0.7);
-  --glass-line: rgba(255, 255, 255, 0.85);
-  --glass-shade: rgba(122, 24, 92, 0.16);
-  --control-fill: rgba(255, 255, 255, 0.6);
-  --control-line: rgba(42, 15, 61, 0.16);
-  --light-strength: 0.75;
-  --accent-text: #c4005f; /* magenta dark enough for text on glass */
-  --focus: #2e5bff;
+  --stage: #ffe3f0;
+  --hue-1: #ff1f8f; /* hot pink */
+  --hue-2: #ff6eb4; /* pink */
+  --hue-3: #ff8cc6; /* light hot pink */
+  --hue-4: #d4006a; /* deep rose */
+  --text-strong: #5c0031;
+  --text: #7a1446;
+  --text-soft: #9c3d6a;
+  --glass-fill: rgba(255, 255, 255, 0.5);
+  --glass-fill-strong: rgba(255, 255, 255, 0.66);
+  --glass-line: rgba(255, 255, 255, 0.9);
+  --glass-shade: rgba(212, 0, 106, 0.2);
+  --control-fill: rgba(255, 255, 255, 0.62);
+  --control-line: rgba(212, 0, 106, 0.2);
+  --light-strength: 1;
+  --accent-text: #d4006a;
+  --focus: #b0005a;
+  --btn: linear-gradient(100deg, #ff1f8f, #ff4fa3 55%, #ff86c2);
+  --btn-glow: rgba(255, 31, 143, 0.55);
+  --btn-text-shadow: rgba(140, 0, 70, 0.4);
+  --done-bg: #d4006a;
+  --done-text: #fff;
+  --headline-glow: rgba(255, 31, 143, 0.3);
 }
 
-/* Night stage (dark) */
+/* Dark: purples */
 :root.cf-theme-dark {
-  --stage: var(--gabi);
-  --text-strong: #fff6fb;
-  --text: #ecdcf2;
-  --text-soft: #c4aed0;
-  --glass-fill: rgba(40, 14, 66, 0.42);
-  --glass-fill-strong: rgba(48, 18, 78, 0.6);
-  --glass-line: rgba(255, 255, 255, 0.22);
-  --glass-shade: rgba(5, 0, 15, 0.45);
-  --control-fill: rgba(255, 255, 255, 0.08);
-  --control-line: rgba(255, 255, 255, 0.2);
-  --light-strength: 0.9;
-  --accent-text: #ff7ab8;
-  --focus: var(--calamansi);
+  --stage: #13052a;
+  --hue-1: #7b2ff7; /* violet */
+  --hue-2: #b05cff; /* orchid purple */
+  --hue-3: #4c1d95; /* deep indigo-purple */
+  --hue-4: #d9a8ff; /* lilac */
+  --text-strong: #f6efff;
+  --text: #e2d4fa;
+  --text-soft: #b9a3dd;
+  --glass-fill: rgba(42, 14, 82, 0.42);
+  --glass-fill-strong: rgba(48, 18, 96, 0.58);
+  --glass-line: rgba(226, 204, 255, 0.22);
+  --glass-shade: rgba(6, 0, 20, 0.5);
+  --control-fill: rgba(226, 204, 255, 0.08);
+  --control-line: rgba(226, 204, 255, 0.22);
+  --light-strength: 0.85;
+  --accent-text: #d4b0ff;
+  --focus: #e9d5ff;
+  --btn: linear-gradient(100deg, #7b2ff7, #9a46fb 55%, #c07bff);
+  --btn-glow: rgba(123, 47, 247, 0.65);
+  --btn-text-shadow: rgba(40, 0, 90, 0.45);
+  --done-bg: #e9d5ff;
+  --done-text: #2a0c5a;
+  --headline-glow: rgba(176, 92, 255, 0.4);
 }
 
 /* CoreFramework tokens the shared blocks read */
@@ -67,7 +80,7 @@
   --bg-body: var(--stage);
   --text-title: var(--text-strong);
   --text-body: var(--text);
-  --primary: var(--bongga);
+  --primary: var(--hue-1);
   --border-primary: var(--glass-line);
   --text-m: 1.8rem;
   --text-l: 2.2rem;
@@ -102,7 +115,7 @@ a {
   color: inherit;
 }
 ::selection {
-  background: var(--bongga);
+  background: var(--hue-1);
   color: #fff;
 }
 :focus-visible {
@@ -163,7 +176,7 @@ a {
   height: 62vmax;
   left: -18vmax;
   top: -22vmax;
-  background: radial-gradient(circle at 40% 40%, var(--bongga), transparent 66%);
+  background: radial-gradient(circle at 40% 40%, var(--hue-1), transparent 66%);
   animation: drift-a 38s ease-in-out infinite alternate;
 }
 .light-mango {
@@ -171,7 +184,7 @@ a {
   height: 46vmax;
   right: -12vmax;
   top: 6vh;
-  background: radial-gradient(circle at 50% 50%, var(--mango), transparent 64%);
+  background: radial-gradient(circle at 50% 50%, var(--hue-2), transparent 64%);
   animation: drift-b 44s ease-in-out infinite alternate;
 }
 .light-kobalt {
@@ -179,7 +192,7 @@ a {
   height: 58vmax;
   left: 22vw;
   bottom: -34vmax;
-  background: radial-gradient(circle at 50% 50%, var(--kobalt), transparent 66%);
+  background: radial-gradient(circle at 50% 50%, var(--hue-3), transparent 66%);
   animation: drift-c 50s ease-in-out infinite alternate;
 }
 .light-calamansi {
@@ -187,7 +200,7 @@ a {
   height: 18vmax;
   right: 18vw;
   bottom: 8vh;
-  background: radial-gradient(circle, var(--calamansi), transparent 70%);
+  background: radial-gradient(circle, var(--hue-4), transparent 70%);
   opacity: calc(var(--light-strength) * 0.45);
   animation: drift-b 30s ease-in-out infinite alternate-reverse;
 }
@@ -235,7 +248,7 @@ a {
   inset: 0;
   padding: 2px;
   border-radius: inherit;
-  background: conic-gradient(from 210deg, var(--bongga), var(--mango), #fff, var(--kobalt), var(--bongga));
+  background: conic-gradient(from 210deg, var(--hue-1), var(--hue-3), #fff, var(--hue-2), var(--hue-4), var(--hue-1));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -330,7 +343,7 @@ a {
   color: var(--text-strong);
   text-wrap: balance;
   /* the headline is lit by the stage, not painted */
-  text-shadow: 0 0.2rem 0 rgba(255, 255, 255, 0.25), 0 1.2rem 4rem rgba(255, 46, 147, 0.35);
+  text-shadow: 0 0.2rem 0 rgba(255, 255, 255, 0.25), 0 1.2rem 4rem var(--headline-glow);
 }
 .display-s {
   font-size: clamp(4rem, 6vw, 6.4rem);
@@ -423,7 +436,7 @@ select {
 }
 input[type="range"] {
   width: 100%;
-  accent-color: var(--bongga);
+  accent-color: var(--hue-1);
 }
 .toggles {
   display: grid;
@@ -441,7 +454,7 @@ input[type="range"] {
   width: 2rem;
   height: 2rem;
   margin: 0;
-  accent-color: var(--bongga);
+  accent-color: var(--hue-1);
   flex: none;
 }
 .btn-gora {
@@ -452,14 +465,14 @@ input[type="range"] {
   padding: 0 3.2rem;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(100deg, var(--bongga), #ff5a6e 55%, var(--mango));
+  background: var(--btn);
   color: #fff;
   font-family: var(--font-display);
   font-size: 2.2rem;
   letter-spacing: 0.01em;
   text-decoration: none;
-  text-shadow: 0 1px 0 rgba(120, 0, 60, 0.4);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1.4rem 3rem -1.2rem rgba(255, 46, 147, 0.75);
+  text-shadow: 0 1px 0 var(--btn-text-shadow);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1.4rem 3rem -1.2rem var(--btn-glow);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -506,8 +519,8 @@ input[type="range"] {
   transition: background 0.2s ease, color 0.2s ease;
 }
 .btn-copy.is-done {
-  background: var(--calamansi);
-  color: var(--gabi);
+  background: var(--done-bg);
+  color: var(--done-text);
 }
 .output-text {
   flex: 1;
