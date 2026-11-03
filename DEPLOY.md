@@ -27,7 +27,9 @@ To let an editor manage only this site, go to Users → (editor) → Sites and a
 - **Build variables**:
   - `NODE_AUTH_TOKEN` (secret): a GitHub token with `read:packages`, for `@corecastdigital/*` via `.npmrc`
   - `NODE_VERSION` = `22`
-  - `CMS_URL` = `https://cms.corecastdigital.com`
+  - `CMS_URL` = the Payload CMS base URL (no trailing slash)
+- **Runtime variable** (Settings → Variables and secrets): `CMS_URL`, same value. Used by `/preview/*`.
+  `wrangler.jsonc` sets `keep_vars: true`, so deploys leave it in place.
 
 `@corecastdigital/blocks` and `@corecastdigital/cms` are pinned at `^0.7.0`, the current version in corecast-blocks.
 If the install fails with "No matching version", publish 0.7.0 from corecast-blocks first.

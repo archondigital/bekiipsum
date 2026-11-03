@@ -10,9 +10,11 @@
   "compatibility_flags": ["nodejs_compat"],
   "assets": { "directory": "./dist", "binding": "ASSETS" },
   "vars": {
-    "CMS_URL": "https://cms.corecastdigital.com",
     "SITE_SLUG": "bekiipsum"
   },
+  // CMS_URL is set on the Worker in the Cloudflare dashboard (Settings → Variables), not here.
+  // keep_vars stops deploys from deleting it.
+  "keep_vars": true,
   "observability": { "enabled": true },
   "workers_dev": true
 }
