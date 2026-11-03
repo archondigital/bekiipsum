@@ -1,0 +1,193 @@
+---
+/**
+ * The generator (hero). Renders a sample at build time, so there's real Bekinese on screen
+ * before JS runs; the script below regenerates from the form. Settings live in the URL
+ * (?mode=&count=&opening=&html=&dict=), and the 2014 links (?wordCount=&paraCount=) still work.
+ */
+import { generate, seeded, LIMITS, wordCount, type Dictionary } from "@lib/generator";
+
+interface Props {
+  dictionaries: Dictionary[];
+  tagline: string;
+}
+const { dictionaries, tagline } = Astro.props;
+const dict = dictionaries[0];
+const initial = { mode: "paragraphs" as const, count: LIMITS.paragraphs.default, opening: true, html: false };
+const paras = generate(dict, initial, seeded(2014));
+const words = wordCount(paras);
+---
+
+<section id="gora" class="hero wrap" data-generator data-dicts={JSON.stringify(dictionaries)}>
+  <div class="hero-intro">
+    <h1 class="display">Lorem ipsum keme keme</h1>
+    <p class="lede">{tagline} Piliin kung gaano kahaba, pindutin ang Generate, at i-copy.</p>
+
+    <form class="controls glass" data-controls>
+      <fieldset class="field segmented">
+        <legend>Generate</legend>
+        <div class="segments">
+          <label><input type="radio" name="mode" value="paragraphs" checked /><span>Paragraphs</span></label>
+          <label><input type="radio" name="mode" value="sentences" /><span>Sentences</span></label>
+          <label><input type="radio" name="mode" value="words" /><span>Words</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field count-field">
+        <label for="count">How many</label>
+        <div class="count-row">
+          <input id="count-range" type="range" min={LIMITS.paragraphs.min} max={LIMITS.paragraphs.max} value={initial.count} aria-hidden="true" tabindex="-1" data-range />
+          <input id="count" name="count" type="number" inputmode="numeric" min={LIMITS.paragraphs.min} max={LIMITS.paragraphs.max} value={initial.count} data-count />
+        </div>
+      </div>
+
+      {dictionaries.length > 1 ? (
+        <div class="field">
+          <label for="dict">Dictionary</label>
+          <select id="dict" name="dict" data-dict>
+            {dictionaries.map((d) => <option value={d.slug}>{d.name}</option>)}
+          </select>
+        </div>
+      ) : (
+        <input type="hidden" name="dict" value={dict.slug} data-dict />
+      )}
+
+      <div class="field toggles">
+        <label class="opt"><input type="checkbox" name="opening" checked data-opening /><span>Start with “{dict.opening || "Lorem ipsum keme keme"}”</span></label>
+        <label class="opt"><input type="checkbox" name="html" data-html /><span>Wrap in &lt;p&gt; tags</span></label>
+      </div>
+
+      <button class="btn-gora" type="submit">Generate</button>
+    </form>
+  </div>
+
+  <div class="output glass glass-edge">
+    <div class="output-bar">
+      <p class="output-meta" data-meta>{words} words, {paras.length} paragraphs</p>
+      <button class="btn-copy" type="button" data-copy>Copy text</button>
+    </div>
+    <div class="output-text" data-output tabindex="0" aria-label="Generated text">
+      {paras.map((p) => <p>{p}</p>)}
+    </div>
+    <p class="visually-hidden" role="status" aria-live="polite" data-status></p>
+  </div>
+</section>
+
+<script>
+  import { generate, toText, wordCount, clampCount, LIMITS, type Dictionary, type Mode } from "@lib/generator";
+
+  const root = document.querySelector<HTMLElement>("[data-generator]")!;
+  const dicts: Dictionary[] = JSON.parse(root.dataset.dicts || "[]");
+  const form = root.querySelector<HTMLFormElement>("[data-controls]")!;
+  const count = root.querySelector<HTMLInputElement>("[data-count]")!;
+  const range = root.querySelector<HTMLInputElement>("[data-range]")!;
+  const dictEl = root.querySelector<HTMLInputElement | HTMLSelectElement>("[data-dict]")!;
+  const opening = root.querySelector<HTMLInputElement>("[data-opening]")!;
+  const html = root.querySelector<HTMLInputElement>("[data-html]")!;
+  const out = root.querySelector<HTMLElement>("[data-output]")!;
+  const meta = root.querySelector<HTMLElement>("[data-meta]")!;
+  const status = root.querySelector<HTMLElement>("[data-status]")!;
+  const copyBtn = root.querySelector<HTMLButtonElement>("[data-copy]")!;
+  const modes = [...root.querySelectorAll<HTMLInputElement>('input[name="mode"]')];
+
+  const mode = (): Mode => (modes.find((m) => m.checked)?.value as Mode) || "paragraphs";
+  let current: string[] = [...out.querySelectorAll("p")].map((p) => p.textContent || "");
+
+  function setLimits(m: Mode, value?: number) {
+    const { min, max } = LIMITS[m];
+    for (const el of [count, range]) {
+      el.min = String(min);
+      el.max = String(max);
+    }
+    const v = clampCount(m, value ?? LIMITS[m].default);
+    count.value = range.value = String(v);
+  }
+
+  function render() {
+    out.replaceChildren();
+    if (html.checked) {
+      const pre = document.createElement("pre");
+      pre.textContent = toText(current, true);
+      out.append(pre);
+    } else {
+      for (const p of current) {
+        const el = document.createElement("p");
+        el.textContent = p;
+        out.append(el);
+      }
+    }
+    const w = wordCount(current);
+    meta.textContent = `${w} ${w === 1 ? "word" : "words"}, ${current.length} ${current.length === 1 ? "paragraph" : "paragraphs"}`;
+  }
+
+  function run(announce = true) {
+    const m = mode();
+    const n = clampCount(m, count.value);
+    count.value = range.value = String(n);
+    const d = dicts.find((x) => x.slug === dictEl.value) ?? dicts[0];
+    current = generate(d, { mode: m, count: n, opening: opening.checked, html: html.checked });
+    render();
+    out.classList.remove("is-fresh");
+    void out.offsetWidth; // restart the fade
+    out.classList.add("is-fresh");
+    const q = new URLSearchParams({ mode: m, count: String(n) });
+    if (!opening.checked) q.set("opening", "0");
+    if (html.checked) q.set("html", "1");
+    if (dicts.length > 1) q.set("dict", d.slug);
+    history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
+    if (announce) status.textContent = `Generated ${meta.textContent}.`;
+  }
+
+  // Settings from the address bar (new style, then the 2014 ?wordCount=&paraCount= links).
+  const q = new URLSearchParams(location.search);
+  if (q.size) {
+    let m = (q.get("mode") as Mode) || "paragraphs";
+    let n = Number(q.get("count"));
+    const legacyWords = Number(q.get("wordCount"));
+    const legacyParas = Number(q.get("paraCount"));
+    if (q.has("wordCount")) {
+      if (legacyParas > 1) [m, n] = ["paragraphs", legacyParas];
+      else [m, n] = ["words", legacyWords];
+    }
+    if (!(m in LIMITS)) m = "paragraphs";
+    modes.forEach((r) => (r.checked = r.value === m));
+    setLimits(m, n || undefined);
+    opening.checked = q.get("opening") !== "0";
+    html.checked = q.get("html") === "1";
+    if (q.get("dict") && dicts.some((d) => d.slug === q.get("dict"))) dictEl.value = q.get("dict")!;
+    run(false);
+  }
+
+  modes.forEach((r) => r.addEventListener("change", () => { setLimits(mode()); run(); }));
+  range.addEventListener("input", () => (count.value = range.value));
+  range.addEventListener("change", () => run());
+  count.addEventListener("input", () => (range.value = count.value));
+  html.addEventListener("change", render);
+  opening.addEventListener("change", () => run());
+  dictEl.addEventListener("change", () => run());
+  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
+
+  let resetTimer: ReturnType<typeof setTimeout> | undefined;
+  copyBtn.addEventListener("click", async () => {
+    const text = toText(current, html.checked);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // older browsers / insecure context: select the text so Cmd/Ctrl+C works
+      const sel = getSelection();
+      const r = document.createRange();
+      r.selectNodeContents(out);
+      sel?.removeAllRanges();
+      sel?.addRange(r);
+      status.textContent = "Text selected. Press Ctrl+C or Cmd+C to copy.";
+      return;
+    }
+    copyBtn.textContent = "Copied";
+    copyBtn.classList.add("is-done");
+    status.textContent = "Copied to clipboard.";
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      copyBtn.textContent = "Copy text";
+      copyBtn.classList.remove("is-done");
+    }, 1800);
+  });
+</script>

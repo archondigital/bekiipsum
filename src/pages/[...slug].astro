@@ -1,0 +1,27 @@
+---
+import Base from "@layouts/Base.astro";
+import Prose from "@components/Prose.astro";
+import { getCollection } from "astro:content";
+import { seoProps } from "@corecastdigital/cms";
+import { getSiteSettings } from "@lib/site";
+import { fallbackPrivacyHtml } from "@data/copy";
+
+// CMS pages at /<slug> ("home" is the generator page at /). /privacy has a local fallback.
+export async function getStaticPaths() {
+  const RESERVED = new Set(["", "home", "preview", "robots.txt"]);
+  const trim = (s: unknown) => String(s ?? "").replace(/^\/+|\/+$/g, "");
+  const pages = (await getCollection("pages")).map((e) => e.data).filter((p) => !RESERVED.has(trim(p.slug)));
+  const routes = pages.map((page) => ({ params: { slug: trim(page.slug) }, props: { page } }));
+  if (!routes.some((r) => r.params.slug === "privacy"))
+    routes.push({ params: { slug: "privacy" }, props: { page: { title: "Privacy Policy", slug: "privacy", layout: [], url: "/privacy/", seo: {} } as any } });
+  return routes;
+}
+
+const { page } = Astro.props as { page: any };
+const site = await getSiteSettings();
+const seo = seoProps(page, { template: site.titleTemplate, settings: site });
+const firstIsHeading = page.layout?.[0]?.blockType === "hero";
+---
+<Base {...seo}>
+  <Prose blocks={page.layout} title={firstIsHeading ? undefined : page.title} fallbackHtml={page.slug === "privacy" ? fallbackPrivacyHtml : ""} />
+</Base>

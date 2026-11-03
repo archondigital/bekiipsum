@@ -1,0 +1,47 @@
+---
+/**
+ * Draft preview: /preview/pages/<id>?exp=…&sig=…  (on demand, rendered by the Worker)
+ * Payload signs the link; /api/preview-doc verifies it and returns the draft.
+ */
+export const prerender = false;
+
+import Base from "@layouts/Base.astro";
+import Prose from "@components/Prose.astro";
+import PreviewBar from "@corecastdigital/blocks/PreviewBar.astro";
+import { cmsBaseUrl, fetchPreview, readLivePreviewData, mapPage } from "@corecastdigital/cms";
+
+const SITE_SLUG = import.meta.env.SITE_SLUG || "bekiipsum";
+const cms = cmsBaseUrl();
+const { collection = "", id = "" } = Astro.params;
+const live = await readLivePreviewData(Astro.request);
+
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("X-Robots-Tag", "noindex, nofollow");
+Astro.response.headers.set("Content-Security-Policy", `frame-ancestors 'self' ${new URL(cms).origin}`);
+
+let doc: any = null;
+let error = "";
+if (collection !== "pages") {
+  Astro.response.status = 404;
+  error = `This site has no preview for “${collection}”.`;
+} else {
+  const r = await fetchPreview({ collection, id, data: live, exp: Astro.url.searchParams.get("exp") ?? "", sig: Astro.url.searchParams.get("sig") ?? "" });
+  if (!r.ok) {
+    Astro.response.status = r.status;
+    error =
+      r.reason === "expired" ? "This preview link has expired. Click Preview again in Payload."
+      : r.reason === "unreachable" ? "The CMS could not be reached. Try again in a moment."
+      : r.reason === "not-found" ? "That document no longer exists."
+      : "This preview link isn’t valid. Open the preview from Payload.";
+  } else if (r.doc?.site?.slug && r.doc.site.slug !== SITE_SLUG) {
+    Astro.response.status = 404;
+    error = `This document belongs to another site (${r.doc.site.slug}).`;
+  } else doc = r.doc;
+}
+const page = doc ? mapPage(doc) : null;
+const esc = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+---
+<Base title={`Preview: ${doc?.title ?? "draft"} — Beki Ipsum`} description="" noindex>
+  {error ? <Prose title="Can’t show this preview" fallbackHtml={`<p>${esc(error)}</p>`} /> : page ? <Prose blocks={page.layout} title={page.slug === "home" ? undefined : page.title} /> : null}
+  <PreviewBar cmsUrl={cms} status={doc?._status === "published" ? "Published" : "Draft"} updatedAt={doc?.updatedAt} live={Boolean(live)} />
+</Base>

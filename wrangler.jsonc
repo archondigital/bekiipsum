@@ -1,0 +1,18 @@
+// Cloudflare Workers config for bekiipsum.com.
+// Static pages are served as Workers static assets (no Worker invocation); only /preview/*
+// reaches the Worker. Built and deployed by Workers Builds on push to master, and by the
+// Payload deploy hook on publish. See DEPLOY.md.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bekiipsum",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "directory": "./dist", "binding": "ASSETS" },
+  "vars": {
+    "CMS_URL": "https://cms.corecastdigital.com",
+    "SITE_SLUG": "bekiipsum"
+  },
+  "observability": { "enabled": true },
+  "workers_dev": true
+}

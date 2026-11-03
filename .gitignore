@@ -1,4 +1,24 @@
-_site
-_drafts
-_posts-on-hold
-.sass-cache
+# build output
+dist/
+# generated types
+.astro/
+# dependencies
+node_modules/
+# logs
+npm-debug.log*
+# environment variables
+.env
+.env.production
+# macOS
+.DS_Store
+# local helpers
+_shot*.mjs
+preview-*.png
+.stacki/
+
+# Cloudflare / wrangler
+.wrangler/
+.dev.vars
+
+# lockfile not committed (private @corecastdigital packages), same as archondigital-frontend
+package-lock.json
