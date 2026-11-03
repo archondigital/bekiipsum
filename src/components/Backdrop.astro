@@ -1,10 +1,14 @@
 ---
-// The "stage": slow-moving lights the glass panels float over. Decorative only.
+// The stage: soft cotton-candy clouds drifting behind the glass. Decorative only.
+// Each puff is a few overlapping radial gradients (no live blur), and only transforms
+// animate, so it stays cheap on phones. Still for prefers-reduced-motion.
 ---
 <div class="stage" aria-hidden="true">
-  <span class="light light-magenta"></span>
-  <span class="light light-mango"></span>
-  <span class="light light-kobalt"></span>
-  <span class="light light-calamansi"></span>
+  <span class="puff puff-1"></span>
+  <span class="puff puff-2"></span>
+  <span class="puff puff-3"></span>
+  <span class="puff puff-4"></span>
+  <span class="puff puff-5"></span>
+  <span class="puff puff-6"></span>
   <span class="grain"></span>
 </div>
