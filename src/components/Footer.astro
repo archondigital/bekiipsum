@@ -1,0 +1,13 @@
+---
+import { getSiteSettings } from "@lib/site";
+const site = await getSiteSettings();
+---
+<footer class="site-footer">
+  <div class="wrap footer-bar">
+    <p class="footer-note">{site.footerNote}</p>
+    <ul class="footer-links">
+      {site.footerLinks.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      {site.socials.map((s) => <li><a href={s.url} rel="me noopener">{s.platform === "github" ? "Source on GitHub" : s.platform}</a></li>)}
+    </ul>
+  </div>
+</footer>

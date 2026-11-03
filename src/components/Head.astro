@@ -1,0 +1,73 @@
+---
+import "@corecastdigital/blocks/styles/coreframework.css";
+import "@fontsource/shrikhand/400.css";
+import "@fontsource-variable/bricolage-grotesque/wght.css";
+import "../styles/glass.css";
+import shrikhand from "@fontsource/shrikhand/files/shrikhand-latin-400-normal.woff2?url";
+import bricolage from "@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url";
+import { getSiteSettings } from "@lib/site";
+import { SITE } from "@consts";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string | null;
+  noindex?: boolean;
+  canonical?: string | null;
+}
+
+const site = await getSiteSettings();
+const { title, description, image, canonical } = Astro.props;
+const noindex = Astro.props.noindex || site.discourageSearchEngines;
+const canonicalHref = canonical ? new URL(canonical, Astro.site) : new URL(Astro.url.pathname, Astro.site);
+const ogImage = image || site.defaultImage?.url || "/og.jpg";
+const live = import.meta.env.PROD && !Astro.url.pathname.startsWith("/preview");
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<link rel="preload" href={bricolage} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={shrikhand} as="font" type="font/woff2" crossorigin />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#13052A" media="(prefers-color-scheme: dark)" />
+<meta name="theme-color" content="#FFE8F3" media="(prefers-color-scheme: light)" />
+{noindex ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonicalHref} />}
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(ogImage, Astro.url)} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@archondigital" />
+<meta name="p:domain_verify" content="d2f0d5c994287b95713b694fdb03b8df" />
+
+<!-- Theme: follows the device unless the visitor picked one (header toggle). -->
+<script is:inline>
+  (function () {
+    var stored = null;
+    try { stored = localStorage.getItem("theme"); } catch (e) {}
+    var dark = stored ? stored === "dark" : !window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var r = document.documentElement;
+    r.classList.remove("cf-theme-dark", "cf-theme-light");
+    r.classList.add(dark ? "cf-theme-dark" : "cf-theme-light");
+  })();
+</script>
+
+{live && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.GA_ID}`}></script>
+    <script is:inline define:vars={{ id: SITE.GA_ID }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', id);
+    </script>
+    <script is:inline async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.ADSENSE_CLIENT}`} crossorigin="anonymous"></script>
+  </>
+)}

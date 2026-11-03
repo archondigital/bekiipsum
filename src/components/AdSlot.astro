@@ -1,0 +1,13 @@
+---
+// The bekiipsum-responsive AdSense unit from the 2014 site. Production builds only.
+import { SITE } from "@consts";
+const live = import.meta.env.PROD;
+---
+{live && (
+  <aside class="ad-slot wrap" aria-label="Advertisement">
+    <div class="glass ad-inner">
+      <ins class="adsbygoogle" style="display:block" data-ad-client={SITE.ADSENSE_CLIENT} data-ad-slot="5024365094" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </aside>
+)}

@@ -1,0 +1,12 @@
+---
+/** A CMS page's blocks inside the glass reading panel, or fallback HTML when the CMS has none. */
+import RenderBlocks from "@corecastdigital/blocks/RenderBlocks.astro";
+interface Props { blocks?: any[] | null; fallbackHtml?: string; id?: string; title?: string }
+const { blocks, fallbackHtml = "", id, title } = Astro.props;
+---
+<section class="reading wrap" id={id}>
+  <div class="glass reading-panel">
+    {title && <h1 class="page-title">{title}</h1>}
+    {blocks?.length ? <RenderBlocks blocks={blocks} /> : <div class="block-prose" set:html={fallbackHtml} />}
+  </div>
+</section>

@@ -1,0 +1,818 @@
+/*
+ * bekiipsum.com — "beki pageant stage" liquid glass, monochrome per theme.
+ * Frosted panels float over slow stage lights. One panel — the
+ * generator output — gets the iridescent edge; everything else stays quiet.
+ * Sizes in rem: CoreFramework sets html to 62.5%, so 1rem = 10px.
+ */
+
+/* ---------- tokens ---------- */
+/* Monochrome by theme: hot pink on glass (light), shades of purple (dark). */
+:root {
+  --font-display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --font-body: "Bricolage Grotesque Variable", "Bricolage Grotesque", system-ui, sans-serif;
+
+  --radius-panel: 2.8rem;
+  --radius-control: 1.4rem;
+  --blur: 22px;
+  --wrap: 124rem;
+  --gutter: clamp(1.6rem, 4vw, 4rem);
+}
+
+/* Light: hot pink */
+:root,
+:root.cf-theme-light {
+  --stage: #ffe3f0;
+  --hue-1: #ff1f8f; /* hot pink */
+  --hue-2: #ff6eb4; /* pink */
+  --hue-3: #ff8cc6; /* light hot pink */
+  --hue-4: #d4006a; /* deep rose */
+  --text-strong: #5c0031;
+  --text: #7a1446;
+  --text-soft: #9c3d6a;
+  --glass-fill: rgba(255, 255, 255, 0.34);
+  --glass-fill-strong: rgba(255, 255, 255, 0.56);
+  --glass-line: rgba(255, 255, 255, 0.9);
+  --glass-shade: rgba(212, 0, 106, 0.2);
+  --control-fill: rgba(255, 255, 255, 0.62);
+  --control-line: rgba(212, 0, 106, 0.2);
+  --light-strength: 0.95;
+  --accent-text: #d4006a;
+  /* cotton candy (light): pastel to hot pinks */
+  --candy-1: rgba(255, 126, 190, 0.85);
+  --candy-2: rgba(255, 188, 222, 0.9);
+  --candy-3: rgba(255, 92, 170, 0.7);
+  --candy-4: rgba(255, 220, 238, 0.95);
+  --candy-5: rgba(255, 31, 143, 0.55);
+  --focus: #b0005a;
+  --btn: linear-gradient(100deg, #ff1f8f, #ff4fa3 55%, #ff86c2);
+  --btn-glow: rgba(255, 31, 143, 0.55);
+  --btn-text-shadow: rgba(140, 0, 70, 0.4);
+  --done-bg: #d4006a;
+  --done-text: #fff;
+  --headline-glow: rgba(255, 31, 143, 0.3);
+  /* liquid glass material */
+  --spec: rgba(255, 255, 255, 0.95); /* specular highlight */
+  --spec-soft: rgba(255, 255, 255, 0.55);
+  --thick: rgba(255, 255, 255, 0.5); /* inner glow = thickness */
+  --sheen: rgba(255, 255, 255, 0.5);
+  --rim: conic-gradient(from 200deg, #ff1f8f, #ffd0e6, #ffffff, #ff6eb4, #c40063, #ffb3d6, #ff1f8f);
+  --rim-opacity: 0.85;
+  --tint-btn: rgba(255, 31, 143, 0.88);
+  --tint-btn-2: rgba(255, 110, 180, 0.82);
+}
+
+/* Dark: purples */
+:root.cf-theme-dark {
+  --stage: #13052a;
+  --hue-1: #7b2ff7; /* violet */
+  --hue-2: #b05cff; /* orchid purple */
+  --hue-3: #4c1d95; /* deep indigo-purple */
+  --hue-4: #d9a8ff; /* lilac */
+  --text-strong: #f6efff;
+  --text: #e2d4fa;
+  --text-soft: #b9a3dd;
+  --glass-fill: rgba(42, 14, 82, 0.3);
+  --glass-fill-strong: rgba(40, 14, 84, 0.55);
+  --glass-line: rgba(226, 204, 255, 0.22);
+  --glass-shade: rgba(6, 0, 20, 0.5);
+  --control-fill: rgba(226, 204, 255, 0.08);
+  --control-line: rgba(226, 204, 255, 0.22);
+  --light-strength: 0.72;
+  --accent-text: #d4b0ff;
+  /* cotton candy (dark): violet, orchid, lilac */
+  --candy-1: rgba(123, 47, 247, 0.6);
+  --candy-2: rgba(176, 92, 255, 0.38);
+  --candy-3: rgba(76, 29, 149, 0.8);
+  --candy-4: rgba(217, 168, 255, 0.2);
+  --candy-5: rgba(154, 70, 251, 0.42);
+  --focus: #e9d5ff;
+  --btn: linear-gradient(100deg, #7b2ff7, #9a46fb 55%, #c07bff);
+  --btn-glow: rgba(123, 47, 247, 0.65);
+  --btn-text-shadow: rgba(40, 0, 90, 0.45);
+  --done-bg: #e9d5ff;
+  --done-text: #2a0c5a;
+  --headline-glow: rgba(176, 92, 255, 0.4);
+  --spec: rgba(240, 225, 255, 0.75);
+  --spec-soft: rgba(220, 190, 255, 0.3);
+  --thick: rgba(190, 140, 255, 0.22);
+  --sheen: rgba(226, 204, 255, 0.22);
+  --rim: conic-gradient(from 200deg, #7b2ff7, #e9d5ff, #b05cff, #4c1d95, #d9a8ff, #9a46fb, #7b2ff7);
+  --rim-opacity: 0.75;
+  --tint-btn: rgba(123, 47, 247, 0.88);
+  --tint-btn-2: rgba(176, 92, 255, 0.8);
+}
+
+/* CoreFramework tokens the shared blocks read */
+:root,
+:root.cf-theme-light,
+:root.cf-theme-dark {
+  --bg-body: var(--stage);
+  --text-title: var(--text-strong);
+  --text-body: var(--text);
+  --primary: var(--hue-1);
+  --border-primary: var(--glass-line);
+  --text-m: 1.8rem;
+  --text-l: 2.2rem;
+  --text-xl: 2.8rem;
+}
+
+/* ---------- base ---------- */
+html {
+  background: var(--stage);
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--stage);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1.7rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+a {
+  color: inherit;
+}
+::selection {
+  background: var(--hue-1);
+  color: #fff;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  box-sizing: border-box;
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.skip-link {
+  position: absolute;
+  left: 1.6rem;
+  top: -10rem;
+  z-index: 100;
+  padding: 1rem 1.6rem;
+  border-radius: var(--radius-control);
+  background: var(--text-strong);
+  color: var(--stage);
+}
+.skip-link:focus {
+  top: 1.6rem;
+}
+/* shared blocks: no hidden-until-JS entrances on this site */
+.animate {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- the stage: cotton candy ---------- */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* base wash, so the space between puffs is still sugar, not flat paper */
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--candy-2), transparent 60%),
+    radial-gradient(110% 90% at 100% 100%, var(--candy-4), transparent 65%),
+    var(--stage);
+}
+.puff {
+  position: absolute;
+  width: 84vmax;
+  height: 72vmax;
+  opacity: var(--light-strength);
+  will-change: transform;
+  animation: candy-a 64s ease-in-out infinite alternate;
+  /* overlapping lobes with a flat, fluffy falloff: one soft cloud, not separate dots */
+  background:
+    radial-gradient(closest-side, var(--c1) 0%, color-mix(in srgb, var(--c1) 55%, transparent) 50%, transparent 100%),
+    radial-gradient(closest-side, var(--c2) 0%, color-mix(in srgb, var(--c2) 55%, transparent) 50%, transparent 100%),
+    radial-gradient(closest-side, var(--c3) 0%, color-mix(in srgb, var(--c3) 55%, transparent) 50%, transparent 100%);
+  background-size: 78% 84%, 70% 76%, 82% 72%;
+  background-position: 18% 30%, 82% 22%, 50% 86%;
+  background-repeat: no-repeat;
+}
+.puff-1 { --c1: var(--candy-1); --c2: var(--candy-2); --c3: var(--candy-3); left: -22vmax; top: -18vmax; }
+.puff-2 { --c1: var(--candy-2); --c2: var(--candy-4); --c3: var(--candy-1); right: -24vmax; top: -10vmax; animation-name: candy-b; animation-duration: 78s; animation-delay: -20s; }
+.puff-3 { --c1: var(--candy-3); --c2: var(--candy-1); --c3: var(--candy-4); left: 18vw; bottom: -30vmax; animation-name: candy-c; animation-duration: 70s; animation-delay: -35s; }
+.puff-4 { --c1: var(--candy-4); --c2: var(--candy-2); --c3: var(--candy-5); right: -10vmax; bottom: -22vmax; width: 66vmax; height: 58vmax; animation-duration: 56s; animation-delay: -12s; animation-direction: alternate-reverse; }
+.puff-5 { --c1: var(--candy-5); --c2: var(--candy-4); --c3: var(--candy-2); left: -14vmax; top: 38vh; width: 58vmax; height: 50vmax; animation-name: candy-b; animation-duration: 60s; animation-delay: -44s; opacity: calc(var(--light-strength) * 0.8); }
+.puff-6 { --c1: var(--candy-2); --c2: var(--candy-5); --c3: var(--candy-4); left: 36vw; top: 4vh; width: 54vmax; height: 46vmax; animation-name: candy-c; animation-duration: 84s; animation-delay: -8s; opacity: calc(var(--light-strength) * 0.65); }
+
+/* slow swirl: drift, turn and swell, like spun sugar on the stick */
+@keyframes candy-a {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33%  { transform: translate(8vw, 6vh) rotate(24deg) scale(1.08, 0.96); }
+  66%  { transform: translate(3vw, 14vh) rotate(48deg) scale(0.96, 1.06); }
+  100% { transform: translate(12vw, 4vh) rotate(70deg) scale(1.04); }
+}
+@keyframes candy-b {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  40%  { transform: translate(-10vw, 8vh) rotate(-30deg) scale(1.1, 0.94); }
+  100% { transform: translate(-4vw, 18vh) rotate(-62deg) scale(0.94, 1.04); }
+}
+@keyframes candy-c {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50%  { transform: translate(-8vw, -10vh) rotate(36deg) scale(1.08); }
+  100% { transform: translate(6vw, -16vh) rotate(80deg) scale(0.95, 1.05); }
+}
+/* fine grain so the soft gradients don't band */
+.grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 -.25'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ---------- liquid glass ---------- */
+/*
+ * Layers, back to front:
+ *   backdrop   blur + saturate; in Chromium also refracted at the edges (SVG #liquid-refract,
+ *              see Base.astro; html.has-refraction is set when the browser can do it)
+ *   fill       a thin tint (--glass-fill)
+ *   ::after    sheen: top-left glow + one curved streak, like light on a thick lens
+ *   ::before   chromatic rim (masked conic gradient), the bent light at the edge
+ *   box-shadow specular edges (top-left bright, bottom-right soft), inner glow for thickness,
+ *              and a soft coloured drop shadow
+ * Content sits above the sheen (.glass > * { z-index: 1 }).
+ */
+.glass,
+.liquid {
+  position: relative;
+  isolation: isolate;
+  background: var(--glass-fill);
+  border: 0;
+  border-radius: var(--radius-panel);
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1.5px 0.5px -0.5px var(--spec-soft),
+    inset 0 1.4rem 1.4rem -1.3rem var(--spec-soft),
+    inset 0 -1.4rem 1.6rem -1.3rem var(--spec-soft),
+    inset 0 0 2.4rem 0.2rem var(--thick),
+    0 2.4rem 6rem -2.6rem var(--glass-shade),
+    0 0.4rem 1.2rem -0.6rem var(--glass-shade);
+  -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.04);
+  backdrop-filter: blur(12px) saturate(180%) brightness(1.04);
+}
+.has-refraction .glass,
+.has-refraction .liquid {
+  backdrop-filter: url(#liquid-refract) blur(10px) saturate(180%) brightness(1.04);
+}
+.glass::before,
+.liquid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: var(--rim);
+  opacity: var(--rim-opacity);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  filter: blur(0.3px);
+  pointer-events: none;
+  z-index: 2;
+}
+.glass::after,
+.liquid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--sheen), transparent 42%),
+    radial-gradient(160% 130% at 105% 115%, transparent 58%, var(--sheen) 61.5%, transparent 66%);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+}
+.glass > *,
+.liquid > * {
+  position: relative;
+  z-index: 1;
+}
+.glass-pill {
+  border-radius: 999px;
+}
+/* the reading panel (generator output, FAQ) needs a calmer, denser fill behind long text */
+.glass-edge,
+.reading-panel {
+  background: var(--glass-fill-strong);
+}
+.glass-edge {
+  --rim-opacity: 1;
+}
+.glass-edge::before {
+  padding: 2px;
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass, .liquid { background: var(--glass-fill-strong); }
+}
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-block: 1.6rem;
+}
+.header-bar {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  min-height: 5.6rem;
+  padding-block: 0.6rem;
+  padding-inline: 2.4rem 0.8rem;
+  width: calc(100% - 2 * var(--gutter));
+  max-width: calc(var(--wrap) - 2 * var(--gutter));
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--text-strong);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.wordmark span {
+  color: var(--accent-text);
+}
+.site-header nav {
+  margin-left: auto;
+}
+.nav-list {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav-list a {
+  display: block;
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  color: var(--text-strong);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.nav-list a:hover {
+  background: var(--control-fill);
+}
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  height: 4.4rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--glass-fill-strong);
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1rem var(--thick),
+    0 0 0 1px var(--control-line);
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.cf-theme-dark .icon-moon,
+.cf-theme-light .icon-sun,
+:root:not(.cf-theme-dark):not(.cf-theme-light) .icon-sun {
+  display: none;
+}
+
+/* ---------- hero / generator ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2.4rem, 4vw, 5.6rem);
+  align-items: start;
+  padding-block: clamp(3.2rem, 6vw, 7.2rem) clamp(4rem, 6vw, 8rem);
+}
+.display {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(5.2rem, 8vw, 10.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+  text-wrap: balance;
+  /* the headline is lit by the stage, not painted */
+  text-shadow: 0 0.2rem 0 rgba(255, 255, 255, 0.25), 0 1.2rem 4rem var(--headline-glow);
+}
+.display-s {
+  font-size: clamp(4rem, 6vw, 6.4rem);
+}
+.lede {
+  max-width: 44ch;
+  margin: 2.4rem 0 3.2rem;
+  font-size: 2rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.controls {
+  display: grid;
+  gap: 2.2rem;
+  padding: 2.8rem;
+}
+.field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.field > label:not(.opt),
+.field > legend {
+  display: block;
+  margin-bottom: 0.8rem;
+  padding: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  color: var(--text-strong);
+}
+.segments {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0.4rem;
+  border: 1px solid var(--control-line);
+  border-radius: calc(var(--radius-control) + 0.4rem);
+  background: var(--control-fill);
+}
+.segments label {
+  position: relative;
+}
+.segments input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.segments span {
+  display: block;
+  padding: 1rem 0.8rem;
+  border-radius: var(--radius-control);
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--text);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.segments input:checked + span {
+  background: var(--glass-fill-strong);
+  color: var(--text-strong);
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1.2rem var(--thick),
+    0 0 0 1px var(--control-line),
+    0 0.8rem 1.8rem -0.8rem var(--glass-shade);
+}
+.segments input:focus-visible + span {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.count-row {
+  display: grid;
+  grid-template-columns: 1fr 9.6rem;
+  gap: 1.6rem;
+  align-items: center;
+}
+input[type="number"],
+select {
+  width: 100%;
+  box-sizing: border-box;
+  height: 4.8rem;
+  padding: 0 1.4rem;
+  border: 1px solid var(--control-line);
+  border-radius: var(--radius-control);
+  background: var(--control-fill);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 1.8rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--hue-1);
+}
+.toggles {
+  display: grid;
+  gap: 1rem;
+}
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-size: 1.6rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.opt input {
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+  accent-color: var(--hue-1);
+  flex: none;
+}
+.btn-gora {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 5.6rem;
+  padding: 0 3.2rem;
+  border: 0;
+  border-radius: 999px;
+  /* tinted liquid glass: colour + specular edges + a sheen arc */
+  background:
+    radial-gradient(120% 140% at 15% -30%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(100deg, var(--tint-btn), var(--tint-btn-2));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  text-shadow: 0 1px 0 var(--btn-text-shadow);
+  box-shadow:
+    inset 2px 2px 1px -1px rgba(255, 255, 255, 0.95),
+    inset -1.5px -2px 1px -1px rgba(255, 255, 255, 0.6),
+    inset 0 0 1.6rem rgba(255, 255, 255, 0.28),
+    0 1.4rem 3rem -1.2rem var(--btn-glow);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-gora:hover {
+  transform: translateY(-1px);
+}
+.btn-gora:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+/* output panel */
+.output {
+  display: flex;
+  flex-direction: column;
+  min-height: 52rem;
+  max-height: 78rem;
+  overflow: hidden;
+}
+.output-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6rem;
+  padding: 1.6rem 1.6rem 1.6rem 2.8rem;
+  border-bottom: 1px solid var(--control-line);
+}
+.output-meta {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+.btn-copy {
+  min-height: 4.4rem;
+  padding: 0 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--glass-fill-strong);
+  color: var(--text-strong);
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1.2rem var(--thick),
+    0 0 0 1px var(--control-line),
+    0 0.8rem 2rem -1rem var(--glass-shade);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-copy.is-done {
+  background: var(--done-bg);
+  color: var(--done-text);
+}
+.output-text {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.8rem 3.2rem 3.6rem;
+  font-size: 1.9rem;
+  line-height: 1.7;
+  color: var(--text-strong);
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-line) transparent;
+}
+.output-text p {
+  max-width: 68ch;
+  margin: 0 0 1.4em;
+}
+.output-text p:first-child::first-line {
+  font-weight: 650;
+}
+.output-text pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font: 1.6rem/1.7 ui-monospace, "SF Mono", Menlo, monospace;
+}
+.output-text.is-fresh {
+  animation: fresh 0.45s ease-out;
+}
+@keyframes fresh {
+  from { opacity: 0.25; filter: blur(3px); }
+}
+
+/* ---------- ad + reading panels ---------- */
+.ad-slot {
+  margin-bottom: 4rem;
+}
+/* nothing to show (ad blocked or unfilled) → no empty panel */
+.ad-slot:has(ins.adsbygoogle:empty),
+.ad-slot:has(ins[data-ad-status="unfilled"]) {
+  display: none;
+}
+.ad-inner {
+  padding: 1.6rem;
+  border-radius: 2rem;
+}
+.reading {
+  padding-bottom: 8rem;
+}
+.reading-panel {
+  max-width: 82rem;
+  padding: clamp(2.8rem, 5vw, 5.6rem);
+  box-sizing: border-box;
+}
+.page-title {
+  margin: 0 0 2.4rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.6rem, 5vw, 5.6rem);
+  line-height: 1;
+  color: var(--text-strong);
+}
+/* shared RichText block inside the panel: drop its band padding and centring */
+.reading-panel .richtext-block {
+  padding-block: 0;
+}
+.reading-panel .block-wrap {
+  padding-inline: 0;
+  max-width: none;
+}
+.reading-panel .block-prose,
+.reading .block-prose {
+  max-width: 64ch;
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.7;
+  text-align: left;
+}
+.reading .block-prose h2 {
+  margin: 3.6rem 0 0.8rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 3.2vw, 3.2rem);
+  line-height: 1.1;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-strong);
+}
+.reading .block-prose h2:first-child {
+  margin-top: 0;
+}
+.block-prose p {
+  margin: 0 0 1.4rem;
+}
+.block-prose a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+  box-shadow: none;
+}
+.block-prose em {
+  color: var(--text-strong);
+}
+.not-found p {
+  margin: 0 0 2rem;
+}
+
+/* ---------- footer ---------- */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  padding-block: 3.2rem 4rem;
+  font-size: 1.5rem;
+  color: var(--text-soft);
+}
+.footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.6rem;
+}
+.footer-note {
+  margin: 0;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.footer-links a {
+  color: var(--text-strong);
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .output {
+    min-height: 0;
+    max-height: 64rem;
+  }
+}
+@media (max-width: 560px) {
+  .site-header {
+    padding-block: 1rem;
+  }
+  .header-bar {
+    gap: 1rem;
+    padding-inline: 1.8rem 0.6rem;
+  }
+  .wordmark {
+    font-size: 2.2rem;
+  }
+  .nav-list a {
+    padding: 0.8rem 1rem;
+    font-size: 1.5rem;
+  }
+  .nav-list li:first-child {
+    display: none; /* the generator is right there */
+  }
+  .controls {
+    padding: 2rem;
+  }
+  .count-row {
+    grid-template-columns: 1fr 8rem;
+  }
+  .output-bar {
+    padding-left: 2rem;
+  }
+  .output-text {
+    padding: 2rem 2rem 2.8rem;
+    font-size: 1.8rem;
+  }
+  .btn-gora {
+    width: 100%;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .puff { animation: none; }
+  .output-text.is-fresh { animation: none; }
+  .btn-gora, .btn-gora:hover, .btn-gora:active { transform: none; transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .liquid, .glass-edge, .reading-panel { background: var(--glass-fill-strong); }
+  .glass::after, .liquid::after { display: none; }
+}

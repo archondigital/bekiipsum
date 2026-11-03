@@ -1,0 +1,23 @@
+---
+import Base from "@layouts/Base.astro";
+import Generator from "@components/Generator.astro";
+import AdSlot from "@components/AdSlot.astro";
+import Prose from "@components/Prose.astro";
+import { getSiteSettings, getDictionaries, getPage } from "@lib/site";
+import { seoProps } from "@corecastdigital/cms";
+import { fallbackHomeHtml } from "@data/copy";
+
+const site = await getSiteSettings();
+const dictionaries = await getDictionaries();
+const home = await getPage("home");
+const seo = home
+  ? seoProps(home, { template: "%s", settings: site })
+  : { title: `${site.name} — Ang beking lorem ipsum generator`, description: site.defaultDescription, image: null, noindex: false, canonical: null };
+// The page title in Payload is just the site name; give the home tab the full line.
+if (seo.title === site.name) seo.title = `${site.name} — Ang beking lorem ipsum generator`;
+---
+<Base {...seo}>
+  <Generator dictionaries={dictionaries} tagline={site.tagline} />
+  <AdSlot />
+  <Prose id="about" blocks={home?.layout} fallbackHtml={fallbackHomeHtml} />
+</Base>

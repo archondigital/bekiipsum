@@ -1,0 +1,28 @@
+---
+import { getSiteSettings } from "@lib/site";
+const site = await getSiteSettings();
+---
+<header class="site-header">
+  <div class="wrap header-bar glass glass-pill">
+    <a class="wordmark" href="/" aria-label={`${site.name}, home`}>beki<span>ipsum</span></a>
+    <nav aria-label="Main">
+      <ul class="nav-list">
+        {site.nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch light or dark mode" data-theme-toggle>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21 14.5A8.5 8.5 0 0 1 9.5 3a.5.5 0 0 0-.6-.6A9.5 9.5 0 1 0 21.6 15.1a.5.5 0 0 0-.6-.6Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+    const r = document.documentElement;
+    const dark = !r.classList.contains("cf-theme-dark");
+    r.classList.toggle("cf-theme-dark", dark);
+    r.classList.toggle("cf-theme-light", !dark);
+    try { localStorage.setItem("theme", dark ? "dark" : "light"); } catch {}
+  });
+</script>
