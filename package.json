@@ -1,7 +1,7 @@
 {
   "name": "bekiipsum",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "description": "bekiipsum.com \u2014 Bekinese lorem ipsum generator. Astro on Cloudflare Workers, content from Payload (cms.corecastdigital.com, site \"bekiipsum\").",
   "scripts": {
