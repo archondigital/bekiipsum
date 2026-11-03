@@ -56,7 +56,7 @@ const words = wordCount(paras);
         <label class="opt"><input type="checkbox" name="html" data-html /><span>Wrap in &lt;p&gt; tags</span></label>
       </div>
 
-      <button class="btn-gora" type="submit">Generate</button>
+      <button class="btn-gora" type="submit" data-gora><span data-gora-label>Generate</span><span class="gora-dots" aria-hidden="true"><i></i><i></i><i></i></span></button>
     </form>
   </div>
 
@@ -88,6 +88,16 @@ const words = wordCount(paras);
   const status = root.querySelector<HTMLElement>("[data-status]")!;
   const copyBtn = root.querySelector<HTMLButtonElement>("[data-copy]")!;
   const modes = [...root.querySelectorAll<HTMLInputElement>('input[name="mode"]')];
+  const goraBtn = root.querySelector<HTMLButtonElement>("[data-gora]")!;
+  const goraLabel = root.querySelector<HTMLElement>("[data-gora-label]")!;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // "Generating" beat: skeleton shimmer, then the words flow in. Only the first words are
+  // staggered so long outputs don't take ages; the rest appear with the last of them.
+  const THINK_MS = 650;
+  const WORD_STAGGER_MS = 12;
+  const MAX_STAGGERED = 90;
+  let ticket = 0;
 
   const mode = (): Mode => (modes.find((m) => m.checked)?.value as Mode) || "paragraphs";
   let current: string[] = [...out.querySelectorAll("p")].map((p) => p.textContent || "");
@@ -102,39 +112,109 @@ const words = wordCount(paras);
     count.value = range.value = String(v);
   }
 
-  function render() {
-    out.replaceChildren();
-    if (html.checked) {
-      const pre = document.createElement("pre");
-      pre.textContent = toText(current, true);
-      out.append(pre);
-    } else {
-      for (const p of current) {
-        const el = document.createElement("p");
-        el.textContent = p;
-        out.append(el);
-      }
-    }
+  function updateMeta() {
     const w = wordCount(current);
     meta.textContent = `${w} ${w === 1 ? "word" : "words"}, ${current.length} ${current.length === 1 ? "paragraph" : "paragraphs"}`;
   }
 
-  function run(announce = true) {
+  /** Text into the panel. `flow` wraps words in spans that fade in one after another. */
+  function render(flow = false) {
+    out.replaceChildren();
+    out.classList.remove("is-fresh", "is-flowing");
+    if (html.checked) {
+      const pre = document.createElement("pre");
+      pre.textContent = toText(current, true);
+      out.append(pre);
+      if (flow) {
+        void out.offsetWidth;
+        out.classList.add("is-fresh");
+      }
+    } else {
+      let i = 0;
+      for (const p of current) {
+        const el = document.createElement("p");
+        if (flow) {
+          const words = p.split(" ");
+          words.forEach((word, k) => {
+            const span = document.createElement("span");
+            span.className = "w";
+            span.textContent = word;
+            span.style.setProperty("--i", String(Math.min(i++, MAX_STAGGERED)));
+            el.append(span);
+            if (k < words.length - 1) el.append(" ");
+          });
+        } else {
+          el.textContent = p;
+        }
+        out.append(el);
+      }
+      if (flow) out.classList.add("is-flowing");
+    }
+    updateMeta();
+  }
+
+  /** Shimmering placeholder lines while "generating". */
+  function renderSkeleton() {
+    out.replaceChildren();
+    out.classList.remove("is-fresh", "is-flowing");
+    const lines = Math.min(10, Math.max(3, Math.ceil(wordCount(current) / 14)));
+    const widths = [96, 88, 100, 72, 92, 84, 98, 64, 90, 78];
+    const box = document.createElement("div");
+    box.className = "skeleton";
+    for (let i = 0; i < lines; i++) {
+      const bar = document.createElement("span");
+      bar.style.width = `${widths[i % widths.length]}%`;
+      bar.style.setProperty("--i", String(i));
+      box.append(bar);
+    }
+    out.append(box);
+    meta.textContent = "Generating…";
+  }
+
+  function setBusy(busy: boolean) {
+    out.setAttribute("aria-busy", String(busy));
+    goraBtn.classList.toggle("is-busy", busy);
+    goraBtn.setAttribute("aria-disabled", String(busy));
+    goraLabel.textContent = busy ? "Generating" : "Generate";
+  }
+
+  function run(announce = true, animate = true) {
     const m = mode();
     const n = clampCount(m, count.value);
     count.value = range.value = String(n);
     const d = dicts.find((x) => x.slug === dictEl.value) ?? dicts[0];
     current = generate(d, { mode: m, count: n, opening: opening.checked, html: html.checked });
-    render();
-    out.classList.remove("is-fresh");
-    void out.offsetWidth; // restart the fade
-    out.classList.add("is-fresh");
     const q = new URLSearchParams({ mode: m, count: String(n) });
     if (!opening.checked) q.set("opening", "0");
     if (html.checked) q.set("html", "1");
     if (dicts.length > 1) q.set("dict", d.slug);
     history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
-    if (announce) status.textContent = `Generated ${meta.textContent}.`;
+
+    const mine = ++ticket;
+    const finish = () => {
+      if (mine !== ticket) return; // a newer run took over
+      setBusy(false);
+      const flow = animate && !reduceMotion.matches && !html.checked;
+      render(flow);
+      if (announce) status.textContent = `Generated ${meta.textContent}.`;
+      // Once the words have landed, swap back to plain paragraphs (same text): keeps the bold
+      // first line and makes selecting/copying behave normally.
+      if (flow) {
+        const total = Math.min(wordCount(current), MAX_STAGGERED) * WORD_STAGGER_MS + 450;
+        setTimeout(() => {
+          if (mine !== ticket) return;
+          render();
+          out.style.minHeight = "";
+        }, total);
+      } else {
+        out.style.minHeight = "";
+      }
+    };
+    if (!animate || reduceMotion.matches) return finish();
+    setBusy(true);
+    out.style.minHeight = `${out.offsetHeight}px`; // hold the panel still while the text swaps
+    renderSkeleton();
+    setTimeout(finish, THINK_MS);
   }
 
   // Settings from the address bar (new style, then the 2014 ?wordCount=&paraCount= links).
@@ -154,17 +234,21 @@ const words = wordCount(paras);
     opening.checked = q.get("opening") !== "0";
     html.checked = q.get("html") === "1";
     if (q.get("dict") && dicts.some((d) => d.slug === q.get("dict"))) dictEl.value = q.get("dict")!;
-    run(false);
+    run(false, false);
   }
 
   modes.forEach((r) => r.addEventListener("change", () => { setLimits(mode()); run(); }));
   range.addEventListener("input", () => (count.value = range.value));
   range.addEventListener("change", () => run());
   count.addEventListener("input", () => (range.value = count.value));
-  html.addEventListener("change", render);
+  html.addEventListener("change", () => { if (goraBtn.classList.contains("is-busy")) return; render(); });
   opening.addEventListener("change", () => run());
   dictEl.addEventListener("change", () => run());
-  form.addEventListener("submit", (e) => { e.preventDefault(); run(); });
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (goraBtn.classList.contains("is-busy")) return;
+    run();
+  });
 
   let resetTimer: ReturnType<typeof setTimeout> | undefined;
   copyBtn.addEventListener("click", async () => {
