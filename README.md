@@ -27,7 +27,7 @@ starts with "Lorem ipsum keme keme", and wrap the output in `<p>` tags. The sett
 
 ## Design
 
-Glassmorphism on a "pageant stage": frosted panels over slow-drifting lights. It is monochrome per theme: hot pink on glass in light mode, shades of purple in dark mode. Shrikhand is the
+Liquid glass on a "pageant stage": panels refract the slow-drifting lights at their edges (Chromium; other browsers get blur + the same rims and highlights), with specular rims, a curved sheen and an inner glow for thickness. It is monochrome per theme: hot pink on glass in light mode, shades of purple in dark mode. Shrikhand is the
 display face and Bricolage Grotesque the text face. Light and dark both follow the device, and there's a toggle
 in the header. Every token is in `src/styles/glass.css`.
 

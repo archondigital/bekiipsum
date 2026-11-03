@@ -3,6 +3,7 @@ import Head from "@components/Head.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Backdrop from "@components/Backdrop.astro";
+import Refraction from "@components/Refraction.astro";
 
 interface Props {
   title: string;
@@ -17,6 +18,7 @@ interface Props {
   <head><Head {...Astro.props} /></head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <Refraction />
     <Backdrop />
     <Header />
     <main id="main"><slot /></main>

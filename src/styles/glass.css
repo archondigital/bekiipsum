@@ -1,5 +1,5 @@
 /*
- * bekiipsum.com — "beki pageant stage" glassmorphism, monochrome per theme.
+ * bekiipsum.com — "beki pageant stage" liquid glass, monochrome per theme.
  * Frosted panels float over slow stage lights. One panel — the
  * generator output — gets the iridescent edge; everything else stays quiet.
  * Sizes in rem: CoreFramework sets html to 62.5%, so 1rem = 10px.
@@ -29,8 +29,8 @@
   --text-strong: #5c0031;
   --text: #7a1446;
   --text-soft: #9c3d6a;
-  --glass-fill: rgba(255, 255, 255, 0.5);
-  --glass-fill-strong: rgba(255, 255, 255, 0.66);
+  --glass-fill: rgba(255, 255, 255, 0.34);
+  --glass-fill-strong: rgba(255, 255, 255, 0.56);
   --glass-line: rgba(255, 255, 255, 0.9);
   --glass-shade: rgba(212, 0, 106, 0.2);
   --control-fill: rgba(255, 255, 255, 0.62);
@@ -44,6 +44,15 @@
   --done-bg: #d4006a;
   --done-text: #fff;
   --headline-glow: rgba(255, 31, 143, 0.3);
+  /* liquid glass material */
+  --spec: rgba(255, 255, 255, 0.95); /* specular highlight */
+  --spec-soft: rgba(255, 255, 255, 0.55);
+  --thick: rgba(255, 255, 255, 0.5); /* inner glow = thickness */
+  --sheen: rgba(255, 255, 255, 0.5);
+  --rim: conic-gradient(from 200deg, #ff1f8f, #ffd0e6, #ffffff, #ff6eb4, #c40063, #ffb3d6, #ff1f8f);
+  --rim-opacity: 0.85;
+  --tint-btn: rgba(255, 31, 143, 0.88);
+  --tint-btn-2: rgba(255, 110, 180, 0.82);
 }
 
 /* Dark: purples */
@@ -56,8 +65,8 @@
   --text-strong: #f6efff;
   --text: #e2d4fa;
   --text-soft: #b9a3dd;
-  --glass-fill: rgba(42, 14, 82, 0.42);
-  --glass-fill-strong: rgba(48, 18, 96, 0.58);
+  --glass-fill: rgba(42, 14, 82, 0.3);
+  --glass-fill-strong: rgba(40, 14, 84, 0.55);
   --glass-line: rgba(226, 204, 255, 0.22);
   --glass-shade: rgba(6, 0, 20, 0.5);
   --control-fill: rgba(226, 204, 255, 0.08);
@@ -71,6 +80,14 @@
   --done-bg: #e9d5ff;
   --done-text: #2a0c5a;
   --headline-glow: rgba(176, 92, 255, 0.4);
+  --spec: rgba(240, 225, 255, 0.75);
+  --spec-soft: rgba(220, 190, 255, 0.3);
+  --thick: rgba(190, 140, 255, 0.22);
+  --sheen: rgba(226, 204, 255, 0.22);
+  --rim: conic-gradient(from 200deg, #7b2ff7, #e9d5ff, #b05cff, #4c1d95, #d9a8ff, #9a46fb, #7b2ff7);
+  --rim-opacity: 0.75;
+  --tint-btn: rgba(123, 47, 247, 0.88);
+  --tint-btn-2: rgba(176, 92, 255, 0.8);
 }
 
 /* CoreFramework tokens the shared blocks read */
@@ -167,7 +184,7 @@ a {
 .light {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(44px);
   opacity: var(--light-strength);
   will-change: transform;
 }
@@ -222,41 +239,90 @@ a {
   to { transform: translate(-16vw, -10vh) scale(1.1); }
 }
 
-/* ---------- glass ---------- */
-.glass {
+/* ---------- liquid glass ---------- */
+/*
+ * Layers, back to front:
+ *   backdrop   blur + saturate; in Chromium also refracted at the edges (SVG #liquid-refract,
+ *              see Base.astro; html.has-refraction is set when the browser can do it)
+ *   fill       a thin tint (--glass-fill)
+ *   ::after    sheen: top-left glow + one curved streak, like light on a thick lens
+ *   ::before   chromatic rim (masked conic gradient), the bent light at the edge
+ *   box-shadow specular edges (top-left bright, bottom-right soft), inner glow for thickness,
+ *              and a soft coloured drop shadow
+ * Content sits above the sheen (.glass > * { z-index: 1 }).
+ */
+.glass,
+.liquid {
   position: relative;
+  isolation: isolate;
   background: var(--glass-fill);
-  border: 1px solid var(--glass-line);
+  border: 0;
   border-radius: var(--radius-panel);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 2.4rem 6rem -2.4rem var(--glass-shade);
-  -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
-  backdrop-filter: blur(var(--blur)) saturate(160%);
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1.5px 0.5px -0.5px var(--spec-soft),
+    inset 0 1.4rem 1.4rem -1.3rem var(--spec-soft),
+    inset 0 -1.4rem 1.6rem -1.3rem var(--spec-soft),
+    inset 0 0 2.4rem 0.2rem var(--thick),
+    0 2.4rem 6rem -2.6rem var(--glass-shade),
+    0 0.4rem 1.2rem -0.6rem var(--glass-shade);
+  -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.04);
+  backdrop-filter: blur(12px) saturate(180%) brightness(1.04);
+}
+.has-refraction .glass,
+.has-refraction .liquid {
+  backdrop-filter: url(#liquid-refract) blur(10px) saturate(180%) brightness(1.04);
+}
+.glass::before,
+.liquid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: var(--rim);
+  opacity: var(--rim-opacity);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  filter: blur(0.3px);
+  pointer-events: none;
+  z-index: 2;
+}
+.glass::after,
+.liquid::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 90% at 0% 0%, var(--sheen), transparent 42%),
+    radial-gradient(160% 130% at 105% 115%, transparent 58%, var(--sheen) 61.5%, transparent 66%);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+}
+.glass > *,
+.liquid > * {
+  position: relative;
+  z-index: 1;
 }
 .glass-pill {
   border-radius: 999px;
 }
-/* The one special panel: an iridescent rim, like light catching sequins. */
-.glass-edge {
-  border: 0;
+/* the reading panel (generator output, FAQ) needs a calmer, denser fill behind long text */
+.glass-edge,
+.reading-panel {
   background: var(--glass-fill-strong);
 }
+.glass-edge {
+  --rim-opacity: 1;
+}
 .glass-edge::before {
-  content: "";
-  position: absolute;
-  inset: 0;
   padding: 2px;
-  border-radius: inherit;
-  background: conic-gradient(from 210deg, var(--hue-1), var(--hue-3), #fff, var(--hue-2), var(--hue-4), var(--hue-1));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-  pointer-events: none;
-  z-index: 2;
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass { background: var(--glass-fill-strong); }
+  .glass, .liquid { background: var(--glass-fill-strong); }
 }
 
 /* ---------- header ---------- */
@@ -273,6 +339,7 @@ a {
   min-height: 5.6rem;
   padding-block: 0.6rem;
   padding-inline: 2.4rem 0.8rem;
+  width: calc(100% - 2 * var(--gutter));
   max-width: calc(var(--wrap) - 2 * var(--gutter));
 }
 .wordmark {
@@ -313,9 +380,14 @@ a {
   place-items: center;
   width: 4.4rem;
   height: 4.4rem;
-  border: 1px solid var(--control-line);
+  border: 0;
   border-radius: 50%;
-  background: var(--control-fill);
+  background: var(--glass-fill-strong);
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1rem var(--thick),
+    0 0 0 1px var(--control-line);
   color: var(--text-strong);
   cursor: pointer;
 }
@@ -405,9 +477,14 @@ a {
   transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 .segments input:checked + span {
-  background: var(--text-strong);
-  color: var(--stage);
-  box-shadow: 0 0.6rem 1.6rem -0.6rem var(--glass-shade);
+  background: var(--glass-fill-strong);
+  color: var(--text-strong);
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1.2rem var(--thick),
+    0 0 0 1px var(--control-line),
+    0 0.8rem 1.8rem -0.8rem var(--glass-shade);
 }
 .segments input:focus-visible + span {
   outline: 3px solid var(--focus);
@@ -458,6 +535,7 @@ input[type="range"] {
   flex: none;
 }
 .btn-gora {
+  position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -465,14 +543,23 @@ input[type="range"] {
   padding: 0 3.2rem;
   border: 0;
   border-radius: 999px;
-  background: var(--btn);
+  /* tinted liquid glass: colour + specular edges + a sheen arc */
+  background:
+    radial-gradient(120% 140% at 15% -30%, rgba(255, 255, 255, 0.55), transparent 45%),
+    linear-gradient(100deg, var(--tint-btn), var(--tint-btn-2));
   color: #fff;
   font-family: var(--font-display);
   font-size: 2.2rem;
   letter-spacing: 0.01em;
   text-decoration: none;
   text-shadow: 0 1px 0 var(--btn-text-shadow);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 1.4rem 3rem -1.2rem var(--btn-glow);
+  box-shadow:
+    inset 2px 2px 1px -1px rgba(255, 255, 255, 0.95),
+    inset -1.5px -2px 1px -1px rgba(255, 255, 255, 0.6),
+    inset 0 0 1.6rem rgba(255, 255, 255, 0.28),
+    0 1.4rem 3rem -1.2rem var(--btn-glow);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -497,7 +584,7 @@ input[type="range"] {
   justify-content: space-between;
   gap: 1.6rem;
   padding: 1.6rem 1.6rem 1.6rem 2.8rem;
-  border-bottom: 1px solid var(--glass-line);
+  border-bottom: 1px solid var(--control-line);
 }
 .output-meta {
   margin: 0;
@@ -508,14 +595,20 @@ input[type="range"] {
 .btn-copy {
   min-height: 4.4rem;
   padding: 0 2rem;
-  border: 1px solid var(--control-line);
+  border: 0;
   border-radius: 999px;
-  background: var(--text-strong);
-  color: var(--stage);
+  background: var(--glass-fill-strong);
+  color: var(--text-strong);
   font: inherit;
   font-weight: 700;
   font-size: 1.5rem;
   cursor: pointer;
+  box-shadow:
+    inset 1.5px 1.5px 0.5px -0.5px var(--spec),
+    inset -1px -1px 0.5px -0.5px var(--spec-soft),
+    inset 0 0 1.2rem var(--thick),
+    0 0 0 1px var(--control-line),
+    0 0.8rem 2rem -1rem var(--glass-shade);
   transition: background 0.2s ease, color 0.2s ease;
 }
 .btn-copy.is-done {
@@ -711,4 +804,9 @@ input[type="range"] {
   .light { animation: none; }
   .output-text.is-fresh { animation: none; }
   .btn-gora, .btn-gora:hover, .btn-gora:active { transform: none; transition: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .liquid, .glass-edge, .reading-panel { background: var(--glass-fill-strong); }
+  .glass::after, .liquid::after { display: none; }
 }
