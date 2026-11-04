@@ -5,7 +5,11 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
-  # Baseline CSP that can't break scripts or embeds: no plugins, no <base> hijack, forms only post
-  # to this site (Hub /hub/submit/). A script-src policy needs a staged Report-Only rollout first.
+  # Enforced: the parts that can't break scripts or embeds (no plugins, no <base> hijack, forms post
+  # only to this site, no framing by other sites).
   Content-Security-Policy: object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  # Full policy in REPORT-ONLY mode: browsers evaluate it but block nothing, and there is no report-uri,
+  # so nothing is collected automatically. Check it by hand with corecast-blocks/tools/csp-scan.mjs,
+  # adjust, and when a scan comes back clean rename this header to Content-Security-Policy.
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'report-sample' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.google.com https://*.gstatic.com https://*.doubleclick.net; style-src 'self' 'unsafe-inline' 'report-sample'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.googlesyndication.com https://*.adtrafficquality.google https://*.google.com https://*.doubleclick.net; frame-src https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
