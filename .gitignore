@@ -22,3 +22,7 @@ preview-*.png
 
 # lockfile not committed (private @corecastdigital packages), same as archondigital-frontend
 package-lock.json
+
+# local env files
+.env.local
+.env.*.local

@@ -5,3 +5,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
+  # Baseline CSP that can't break scripts or embeds: no plugins, no <base> hijack, forms only post
+  # to this site (Hub /hub/submit/). A script-src policy needs a staged Report-Only rollout first.
+  Content-Security-Policy: object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

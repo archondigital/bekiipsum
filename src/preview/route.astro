@@ -33,9 +33,10 @@ if (collection !== "pages") {
       : r.reason === "unreachable" ? "The CMS could not be reached. Try again in a moment."
       : r.reason === "not-found" ? "That document no longer exists."
       : "This preview link isn’t valid. Open the preview from Payload.";
-  } else if (r.doc?.site?.slug && r.doc.site.slug !== SITE_SLUG) {
+  } else if (r.doc?.site?.slug !== SITE_SLUG) {
+    // Fail closed: a document (or posted live-preview data) without this site's slug is not shown here.
     Astro.response.status = 404;
-    error = `This document belongs to another site (${r.doc.site.slug}).`;
+    error = `This document belongs to another site (${r.doc?.site?.slug ?? "none"}).`;
   } else doc = r.doc;
 }
 const page = doc ? mapPage(doc) : null;
