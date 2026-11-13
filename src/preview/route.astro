@@ -8,6 +8,7 @@ export const prerender = false;
 import Base from "@layouts/Base.astro";
 import Prose from "@components/Prose.astro";
 import PreviewBar from "@corecastdigital/blocks/PreviewBar.astro";
+import { esc } from "@corecastdigital/blocks/lexical";
 import { cmsBaseUrl, fetchPreview, readLivePreviewData, mapPage } from "@corecastdigital/cms";
 
 const SITE_SLUG = import.meta.env.SITE_SLUG || "bekiipsum";
@@ -40,7 +41,6 @@ if (collection !== "pages") {
   } else doc = r.doc;
 }
 const page = doc ? mapPage(doc) : null;
-const esc = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 ---
 <Base title={`Preview: ${doc?.title ?? "draft"} — Beki Ipsum`} description="" noindex>
   {error ? <Prose title="Can’t show this preview" fallbackHtml={`<p>${esc(error)}</p>`} /> : page ? <Prose blocks={page.layout} title={page.slug === "home" ? undefined : page.title} /> : null}
