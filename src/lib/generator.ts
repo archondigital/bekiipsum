@@ -3,6 +3,7 @@
  * and in the browser. A dictionary comes from Payload → Dictionaries (or src/data/fallback.ts).
  * Output is safe for work unless Options.nsfw is set; then `nsfwWords` join the pool.
  */
+import { esc } from "@corecastdigital/blocks/lexical";
 export type Dictionary = {
   slug: string;
   name: string;
@@ -127,8 +128,6 @@ export function generate(dict: Dictionary, o: Options, rnd: () => number = Math.
   for (let i = 0; i < sentences.length; i += 6) paras.push(sentences.slice(i, i + 6).join(" "));
   return paras;
 }
-
-const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /** The text that goes on the clipboard. */
 export const toText = (paras: string[], html: boolean) =>
